@@ -5,4 +5,4 @@ The FeatureFixer looks like the original CCleaner from the XP days, and honestly
 I'm currently tidying up my GitHub repo (I started with 30 repos, now only 20 are online). I'm also doing some spring cleaning on my personal projects. Thousands of lines of code have been wiped in the process 😉, but some things will always remain. like the FeatureFixer.
 It's practically impossible to mess up with it. I haven't been able to break anything yet. Plus, everything is reversible
 
-![FFixer_5MjrwZXJn1](https://github.com/user-attachments/assets/843a6c9d-e940-40ee-9204-c446eb8e839e)
+![FFixer_V0fRAtiJmJ](https://github.com/user-attachments/assets/af8ae826-88e3-4ccf-bc9a-9f6e56d26322)
