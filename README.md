@@ -1,4 +1,4 @@
-# FeatureFixer
+# FeatureFixer for Windows 11
 Here's my little private IT toolbox that I use to clean up and tweak Windows systems I work on. This tool is old but packed with over 100 tweaks. Ive disabled many of them for now, leaving only the mainstream features that everyone can use. For some reason, the faster tech evolves and UI designs change, the more I find myself missing the good old classic interfaces.
 
 The FeatureFixer looks like the original CCleaner from the XP days, and honestly, thats all I've ever needed. Two clicks: "Analyze", glance at the results, then hit "Fix". Simple, effective, and fast.
