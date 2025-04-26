@@ -5,4 +5,4 @@ The Crapfixer looks like the original CCleaner from the XP days, and honestly, t
 I'm currently tidying up my GitHub repo (I started with 30 repos, now only 20 are online). I'm also doing some spring cleaning on my personal projects. Thousands of lines of code have been wiped in the process 😉, but some things will always remain. like the Crapfixer.
 It's practically impossible to mess up with it. I haven't been able to break anything yet. Plus, everything is reversible
 
-![CFixer_6xycruauxS](https://github.com/user-attachments/assets/e9de0aac-f936-40f3-a012-e09493cead02)
+![437695846-b85b7e6b-4d6d-493d-8f5c-accf7a50154b](https://github.com/user-attachments/assets/d1388d2e-e51a-44ec-82a9-e2dfcbe43b8f)
