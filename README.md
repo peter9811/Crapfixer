@@ -1,8 +1,9 @@
-# Crapfixer (CFixer) for Windows 11
-Here's my little private IT toolbox that I use to clean up and tweak Windows 11 (also 10) systems I work on. This tool is old but packed with over 100 tweaks. Ive disabled many of them for now, leaving only the mainstream features that everyone can use. For some reason, the faster tech evolves and UI designs change, the more I find myself missing the good old classic interfaces.
+**"This is my personal little IT toolbox that I've been using for years to clean up and tweak Windows 11 systems (and a bit of Windows 10). The tool is about 7 years old, but I've given the codebase a full refresh, especially tuned for Windows 11. I also removed most of the old enterprise scripts, so what you're seeing now is a lightweight, easy-to-use, and safe app. Almost every change you make can be undone, so you can tweak without fear.
 
-The Crapfixer looks like the original CCleaner from the XP days, and honestly, thats all I've ever needed. Two clicks: "Analyze", glance at the results, then hit "Fix". Simple, effective, and fast.
-I'm currently tidying up my GitHub repo (I started with 30 repos, now only 20 are online). I'm also doing some spring cleaning on my personal projects. Thousands of lines of code have been wiped in the process 😉, but some things will always remain. like the Crapfixer.
-It's practically impossible to mess up with it. I haven't been able to break anything yet. Plus, everything is reversible
+Crapfixer still looks like something straight out of the Windows XP era (maybe CCleaner 😄) — and honestly, that's exactly the vibe I was going for. Sometimes simple just beats fancy. Two clicks: 'Analyze', check the results, 'Fix' — done. No drama, no bloat.
+
+While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousands of lines of old code. Some projects come and go, but Crapfixer stays. It's fast, simple, and basically bulletproof. I haven't managed to break anything yet. 😉
+If you like old-school tools that just work, youre gonna feel right at home
+If there's enough interest, I'll also commit the updated code to GitHub soon
 
 ![CFixer_kJsqePTA0J](https://github.com/user-attachments/assets/4ca30f0c-a896-4634-bd07-95e7964ce39e)
