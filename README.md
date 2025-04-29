@@ -10,3 +10,10 @@ If you like old-school tools that just work, youre gonna feel right at home
 If there's enough interest, I'll also commit the updated code to GitHub soon
 
 ![CFixer_kJsqePTA0J](https://github.com/user-attachments/assets/4ca30f0c-a896-4634-bd07-95e7964ce39e)
+
+# How to use
+
+When you launch the tool, all options are pre-enabled to save you the hassle of clicking around.
+1. All you really need to do is hit "Analyze";the tool checks your system status and compares it with the selected options.
+Anything marked in red still needs fixing. Gray means it's already set up on your system.
+2. Then just smash that "Run CFixer!" button and you're good to go.
