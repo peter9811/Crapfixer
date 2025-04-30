@@ -1,0 +1,125 @@
+﻿using Settings.Issues;
+using Settings.Ads;
+using Settings.AI;
+using Settings.Edge;
+using Settings.Gaming;
+using Settings.Personalization;
+using Settings.Privacy;
+using Settings.System;
+using System.Collections.Generic;
+using Settings.UI;
+
+namespace Features
+{
+    public static class FeatureLoader
+    {
+        public static List<FeatureNode> Load()
+        {
+            return new List<FeatureNode>
+            {
+               new FeatureNode("Issues")
+                {
+                    Children =
+                    {
+                        new FeatureNode(new BasicCleanup()),
+                    }
+                },
+
+              new FeatureNode("System")
+                {
+                    Children =
+                    {
+                       new FeatureNode(new BSODDetails()),
+                       new FeatureNode(new VerboseStatus()),
+                       new FeatureNode(new SpeedUpShutdown()),
+                    }
+                },
+
+                new FeatureNode("MS Edge")
+                {
+                    Children =
+                    {
+                       new FeatureNode(new BrowserSignin()),
+                       new FeatureNode(new DefaultTopSites()),
+                       new FeatureNode(new DefautBrowserSetting()),
+                       new FeatureNode(new EdgeCollections()),
+                       new FeatureNode(new EdgeShoppingAssistant()),
+                       new FeatureNode(new FirstRunExperience()),
+                       new FeatureNode(new GamerMode()),
+                       new FeatureNode(new HubsSidebar()),
+                       new FeatureNode(new ImportOnEachLaunch()),
+                       new FeatureNode(new StartupBoost()),
+                       new FeatureNode(new TabPageQuickLinks()),
+                       new FeatureNode(new UserFeedback()),
+                    }
+                },
+
+               new FeatureNode("UI")
+                {
+                    Children =
+                    {
+                       new FeatureNode(new FullContextMenus()),
+                       new FeatureNode(new LockScreen()),
+                       new FeatureNode(new SearchboxTaskbarMode()),
+                       new FeatureNode(new ShowOrHideMostUsedApps()),
+                       new FeatureNode(new ShowTaskViewButton()),
+                       new FeatureNode(new DisableSearchBoxSuggestions()),
+                       new FeatureNode(new StartLayout()),
+                       new FeatureNode(new TaskbarAlignment()),
+                       new FeatureNode(new Transparency()),
+                       new FeatureNode(new AppDarkMode()),
+                       new FeatureNode(new SystemDarkMode()),
+                       new FeatureNode(new DisableSnapAssistFlyout()),
+                    }
+                },
+
+               new FeatureNode("Gaming")
+                {
+                    Children =
+                    {
+                       new FeatureNode(new GameDVR()),
+                       new FeatureNode(new PowerThrottling()),
+                       new FeatureNode(new VisualFX()),
+                    }
+                },
+
+                new FeatureNode("Privacy")
+                {
+                    Children =
+                    {
+                       new FeatureNode(new ActivityHistory()),
+                       new FeatureNode(new LocationTracking()),
+                       new FeatureNode(new PrivacyExperience()),
+                       new FeatureNode(new Telemetry()),
+                    }
+                },
+
+                new FeatureNode("Ads")
+                {
+                    Children =
+                    {
+                        new FeatureNode(new FileExplorerAds()),
+                        new FeatureNode(new FinishSetupAds()),
+                        new FeatureNode(new LockScreenAds()),
+                        new FeatureNode(new PersonalizedAds()),
+                        new FeatureNode(new SettingsAds()),
+                        new FeatureNode(new StartmenuAds()),
+                        new FeatureNode(new TailoredExperiences()),
+                        new FeatureNode(new TipsAndSuggestions()),
+                        new FeatureNode(new WelcomeExperienceAds()),
+                    }
+                },
+
+                new FeatureNode("AI")
+                {
+                    Children =
+                    {
+                       new FeatureNode(new CopilotTaskbar()),
+                       new FeatureNode(new RecallMachine()),
+                       new FeatureNode(new RecallUser()),
+                    }
+                },
+            };
+        }
+    }
+}
