@@ -23,5 +23,6 @@ If there's enough interest, I'll also commit the updated code to GitHub soon
 
 When you launch the tool, all options are pre-enabled to save you the hassle of clicking around.
 1. All you really need to do is hit "Analyze";the tool checks your system status and compares it with the selected options.
-Anything marked in red still needs fixing. Gray means it's already set up on your system.
+Anything marked in red is recommended to be fixed, while gray means it's already set up correctly.
 2. Then just smash that "Run CFixer!" button and you're good to go.
+_For full functionality, it's recommended to run the app as Administrator, since certain features – like editing registry values under HKEY_LOCAL_MACHINE – require elevated permissions._
