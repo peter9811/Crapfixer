@@ -1,5 +1,6 @@
 
 # the tool that says what everyone’s thinking
+## the tool Microsoft would build, if they hated bloatware as much as we do
 
 Remember the days when you'd run a registry cleaner even if you didn't really need it? (Or maybe we did need it? I was probably too young to figure that out, too young for that crap 😅)
 Back then, cleaner tools like CCleaner were everywhere, it felt like every other tech forum had a "top 10 Windows Optimizers" list.
@@ -17,7 +18,8 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 If you like old-school tools that just work, youre gonna feel right at home
 If there's enough interest, I'll also commit the updated code to GitHub soon
 
-![CFixer_kJsqePTA0J](https://github.com/user-attachments/assets/4ca30f0c-a896-4634-bd07-95e7964ce39e)
+![explorer_u0TyFGG8pe](https://github.com/user-attachments/assets/857f481a-765d-4964-bac1-dec2046edd7d)
+
 
 # How to use
 
