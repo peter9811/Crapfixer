@@ -33,7 +33,7 @@ namespace Settings.Privacy
             try
             {
                 Registry.SetValue(dataCollection, "AllowTelemetry", 0, RegistryValueKind.DWord);
-                Registry.SetValue(diagTrack, "Start", 2, RegistryValueKind.DWord);
+                Registry.SetValue(diagTrack, "Start", 4, RegistryValueKind.DWord);
                 return Task.FromResult(true);
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace Settings.Privacy
             try
             {
                 Registry.SetValue(dataCollection, "AllowTelemetry", 1, RegistryValueKind.DWord);
-                Registry.SetValue(diagTrack, "Start", 4, RegistryValueKind.DWord);
+                Registry.SetValue(diagTrack, "Start", 2, RegistryValueKind.DWord);
 
                 return true;
             }

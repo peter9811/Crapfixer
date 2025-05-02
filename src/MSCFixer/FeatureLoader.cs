@@ -32,6 +32,9 @@ namespace Features
                        new FeatureNode(new BSODDetails()),
                        new FeatureNode(new VerboseStatus()),
                        new FeatureNode(new SpeedUpShutdown()),
+                       new FeatureNode(new NetworkThrottling()),
+                       new FeatureNode(new SystemResponsiveness()),
+                       new FeatureNode(new MenuShowDelay()),
                     }
                 },
 
@@ -115,8 +118,7 @@ namespace Features
                     Children =
                     {
                        new FeatureNode(new CopilotTaskbar()),
-                       new FeatureNode(new RecallMachine()),
-                       new FeatureNode(new RecallUser()),
+                       new FeatureNode(new Recall()),
                     }
                 },
             };

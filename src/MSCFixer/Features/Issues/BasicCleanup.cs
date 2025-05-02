@@ -12,7 +12,7 @@ namespace Settings.Issues
         private readonly string tempPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Temp");
         private const int cleanupSetNumber = 1;
 
-        public override string ID() => "Basic Cleanup";
+        public override string ID() => "Basic Disk Cleanup";
 
         public override string Info() => "Deletes all temporary files from the user's Temp folder. Then, the built-in Disk Cleanup utility (cleanmgr) is run.";
 
@@ -23,11 +23,7 @@ namespace Settings.Issues
                 var totalSize = GetDirectorySize(tempPath);
 
                 bool isOk = totalSize <= 50;
-                if (!isOk)
-                {
-                    Logger.Log($"Temp folder size is {totalSize} MB (cleanup recommended!) We need also to include cleanup in the next run.", LogLevel.Warning);
-
-                }
+ 
 
                 return isOk;
             }
@@ -44,7 +40,7 @@ namespace Settings.Issues
             try
             {
                 var totalSize = GetDirectorySize(tempPath);
-                return $"Temp folder size: {totalSize} MB";
+                return $"Temp folder size: {totalSize} MB (We need also to include cleanmgr in the next run)";
             }
             catch (Exception ex)
             {

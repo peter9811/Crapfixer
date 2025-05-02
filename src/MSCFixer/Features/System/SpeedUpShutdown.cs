@@ -18,7 +18,7 @@ namespace Settings.System
 
         public override string ID()
         {
-            return "Speed Up Shutdown Process";
+            return "Speed Up Shutdown Time";
         }
 
         public override string Info()
