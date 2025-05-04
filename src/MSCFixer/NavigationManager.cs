@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
+/// <summary>
+/// Manages navigation between different views.
+/// </summary>
 public class NavigationManager
 {
     private Stack<Control> navigationHistory = new Stack<Control>(); // Holds previous views
@@ -70,5 +73,20 @@ public class NavigationManager
     public void ClearHistory()
     {
         navigationHistory.Clear();
+    }
+
+    /// <summary>
+    /// Switches directly to the main panel, clearing the navigation history.
+    /// </summary>
+    public void GoToMain()
+    {
+        if (mainPanel != null)
+        {
+            navigationHistory.Clear(); // Clear the navigation history
+            panelContainer.Controls.Clear();
+            panelContainer.Controls.Add(mainPanel);
+            mainPanel.Dock = DockStyle.Fill;
+            mainPanel.BringToFront();
+        }
     }
 }

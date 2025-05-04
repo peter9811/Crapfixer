@@ -97,6 +97,7 @@ namespace Settings.Personalization
             try
             {
                 Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
+                Utils.RestartExplorer(); // Restart Explorer to apply changes
                 return Task.FromResult(true);
             }
             catch (Exception ex)
@@ -112,6 +113,7 @@ namespace Settings.Personalization
             try
             {
                 Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
+                Utils.RestartExplorer(); // Restart Explorer to apply changes
                 return true;
             }
             catch (Exception ex)
