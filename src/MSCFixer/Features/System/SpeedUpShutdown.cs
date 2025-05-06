@@ -26,9 +26,9 @@ namespace Settings.System
             return "This feature reduces the WaitToKillServiceTimeout value, which speeds up the shutdown process by reducing the time Windows waits for services to stop.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.StringEquals(keyName, valueName, recommendedValue)
              );
         }

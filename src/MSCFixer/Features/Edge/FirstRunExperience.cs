@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "Hide home screen and 'Getting Started' on initial launch (from version 80 onwards)";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

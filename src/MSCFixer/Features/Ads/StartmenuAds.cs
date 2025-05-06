@@ -26,9 +26,9 @@ namespace Settings.Ads
             return "This feature will disable ads in the start menu.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

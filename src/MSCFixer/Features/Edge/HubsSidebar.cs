@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "This feature will disable Copilot in Microsoft Edge.";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, 0);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, 0));
         }
 
         public override Task<bool> DoFeature()

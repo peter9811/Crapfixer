@@ -26,9 +26,9 @@ namespace Settings.Personalization
             return "This feature will hide the Task view button on taskbar";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

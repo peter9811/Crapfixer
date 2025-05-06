@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "Enables Microsoft Edge processes to initialize at operating system startup and restart in the background after the last browser window has been closed";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

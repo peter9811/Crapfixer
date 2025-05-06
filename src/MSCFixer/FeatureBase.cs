@@ -7,8 +7,8 @@ namespace Crapfixer
         public abstract string ID();
         public abstract string Info();
         public abstract string GetFeatureDetails();
-        public abstract bool CheckFeature();
-        public abstract Task<bool> DoFeature();  // async
+        public abstract Task<bool> CheckFeature();  // async
+        public abstract Task<bool> DoFeature();    // async
         public abstract bool UndoFeature();
     }
 

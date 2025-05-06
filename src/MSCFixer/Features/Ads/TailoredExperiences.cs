@@ -26,9 +26,9 @@ namespace Settings.Ads
             return "Tailored Experiences allows Microsoft to get information from you to deliver personalized tips, ads, and recommendations. Many people would call this telemetry, or even spying.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

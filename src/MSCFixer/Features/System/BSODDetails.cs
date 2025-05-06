@@ -27,9 +27,9 @@ namespace Settings.System
             return "This method displays the full classic BSOD with technical error details instead of the simplified sad face version.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                 Utils.IntEquals(keyName, valueName1, recommendedValue) &&
                 Utils.IntEquals(keyName, valueName2, recommendedValue)
             );

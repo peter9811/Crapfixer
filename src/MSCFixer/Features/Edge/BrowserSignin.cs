@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "This setting controls whether a user can sign into Microsoft Edge with an account to use services such as sync and single sign on";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

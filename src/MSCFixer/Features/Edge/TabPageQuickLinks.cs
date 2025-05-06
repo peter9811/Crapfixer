@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "By default, when you open a new tab, you see a Bing search bar, Bing image of the day set as the page background. For supported websites, Quick Links on the New Tab page can display recent updates right in the tile";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

@@ -26,9 +26,9 @@ namespace Settings.UI
             return "This feature disables Bing search and web suggestions in the Windows Start Menu.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

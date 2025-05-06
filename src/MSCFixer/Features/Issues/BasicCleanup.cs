@@ -16,7 +16,7 @@ namespace Settings.Issues
 
         public override string Info() => "Deletes all temporary files from the user's Temp folder. Then, the built-in Disk Cleanup utility (cleanmgr) is run.";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
             try
             {
@@ -25,12 +25,12 @@ namespace Settings.Issues
                 bool isOk = totalSize <= 50;
  
 
-                return isOk;
+                return Task.FromResult(isOk);
             }
             catch (Exception ex)
             {
                 Logger.Log($"Error checking Temp folder: {ex.Message}", LogLevel.Error);
-                return false;
+                return Task.FromResult(false);
             }
         }
 

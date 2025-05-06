@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "Allow import of data from other browsers on each Microsoft Edge launch";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

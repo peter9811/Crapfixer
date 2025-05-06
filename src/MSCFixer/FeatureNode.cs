@@ -8,6 +8,10 @@ public class FeatureNode
     public FeatureBase Feature { get; }
     public List<FeatureNode> Children { get; set; } = new List<FeatureNode>();
 
+
+   // Property to control default checked state
+   public bool DefaultChecked { get; set; } = true;
+
     // Constructor for categories
     public FeatureNode(string name)
     {

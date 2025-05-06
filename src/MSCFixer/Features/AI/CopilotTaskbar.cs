@@ -26,9 +26,9 @@ namespace Settings.AI
             return "This feature will disable Copilot in Taskbar.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, 1);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, 1));
         }
 
         public override Task<bool> DoFeature()

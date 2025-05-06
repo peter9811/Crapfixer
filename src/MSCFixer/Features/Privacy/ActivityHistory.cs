@@ -26,9 +26,9 @@ namespace Settings.Privacy
             return "Disable activity history (prevents Windows from tracking and storing your activity)";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                Utils.IntEquals(keyName, valueName, recommendedValue)
          );
         }

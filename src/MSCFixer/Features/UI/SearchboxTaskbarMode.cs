@@ -26,9 +26,9 @@ namespace Settings.Personalization
             return "This feature will hide search box on taskbar";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

@@ -27,9 +27,9 @@ namespace Settings.Personalization
             return "This feature disables transparency effects for Start menu, taskbar, and other surfaces.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

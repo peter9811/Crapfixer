@@ -23,9 +23,9 @@ namespace Settings.Ads
             return $"{keyName} | Value: {valueName} + {valueName2} + {valueName3} | Recommended Value: {recommendedValue}";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (Utils.IntEquals(keyName, valueName, recommendedValue) &&
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue) &&
                    Utils.IntEquals(keyName, valueName2, recommendedValue) &&
                    Utils.IntEquals(keyName, valueName3, recommendedValue)
             );

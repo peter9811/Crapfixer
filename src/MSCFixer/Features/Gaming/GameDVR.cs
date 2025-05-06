@@ -31,11 +31,11 @@ namespace Settings.Gaming
             return "This feature will disable Game DVR.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, 0) &&
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, 0) &&
                        Utils.IntEquals(keyName, valueName2, 2) &&
-                       Utils.IntEquals(keyName2, valueName3, 0);
+                       Utils.IntEquals(keyName2, valueName3, 0));
         }
 
         public override Task<bool> DoFeature()

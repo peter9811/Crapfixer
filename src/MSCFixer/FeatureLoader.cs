@@ -22,6 +22,7 @@ namespace Features
                     Children =
                     {
                         new FeatureNode(new BasicCleanup()),
+                        new FeatureNode(new WingetUpgradeAll()) { DefaultChecked = false },
                     }
                 },
 
@@ -70,8 +71,8 @@ namespace Features
                        new FeatureNode(new StartLayout()),
                        new FeatureNode(new TaskbarAlignment()),
                        new FeatureNode(new Transparency()),
-                       new FeatureNode(new AppDarkMode()),
-                       new FeatureNode(new SystemDarkMode()),
+                       new FeatureNode(new AppDarkMode()) { DefaultChecked = false },
+                       new FeatureNode(new SystemDarkMode()) { DefaultChecked = false },
                        new FeatureNode(new DisableSnapAssistFlyout()),
                     }
                 },

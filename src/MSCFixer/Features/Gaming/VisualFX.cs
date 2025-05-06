@@ -26,9 +26,9 @@ namespace Settings.Gaming
             return "This feature will disable visual effects in Windows.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, 0);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, 0));
         }
 
         public override Task<bool> DoFeature()

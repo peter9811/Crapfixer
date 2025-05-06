@@ -19,11 +19,11 @@ namespace Settings.Privacy
             return $"{dataCollection} | {diagTrack}";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                Utils.IntEquals(dataCollection, "AllowTelemetry", 0) &&
-                Utils.IntEquals(diagTrack, "Start", 2)
+                Utils.IntEquals(diagTrack, "Start", 4)
 
            );
         }

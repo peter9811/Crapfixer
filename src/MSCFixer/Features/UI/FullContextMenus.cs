@@ -24,17 +24,17 @@ namespace Settings.Personalization
             return "This feature will enable full context menus";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
             try
             {
                 object value = Registry.GetValue(keyName, "", null);
-                return value != null; // Return true if value is not null
+                return Task.FromResult(value != null); // Return true if value is not null
             }
             catch (Exception ex)
             {
                 Logger.Log("Error occurred while checking: " + ex.Message, LogLevel.Error);
-                return false;
+                return Task.FromResult(false);
             }
         }
 

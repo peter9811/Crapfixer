@@ -26,9 +26,9 @@ namespace Settings.Personalization
             return "This feature enables Dark Mode for apps in Windows 11.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }
@@ -85,9 +85,9 @@ namespace Settings.Personalization
             return "This feature enables Dark Mode for Windows system UI (e.g., taskbar, start menu).";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

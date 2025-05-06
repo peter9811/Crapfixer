@@ -9,7 +9,7 @@ namespace Settings.Personalization
     {
         private const string keyName = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Explorer";
         private const string valueName = "ShowOrHideMostUsedApps";
-        private const int recommendedValue = 0;
+        private const int recommendedValue = 2;
 
         public override string GetFeatureDetails()
         {
@@ -23,12 +23,12 @@ namespace Settings.Personalization
 
         public override string Info()
         {
-            return "This feature will hide Most used apps in start menu";
+            return "This feature will hide Most used apps in start menu for all users";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }
@@ -37,7 +37,7 @@ namespace Settings.Personalization
         {
             try
             {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
+                Registry.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord);
                 return Task.FromResult(true);
             }
             catch (Exception ex)
@@ -52,7 +52,7 @@ namespace Settings.Personalization
         {
             try
             {
-                Registry.SetValue(keyName, valueName, 2, RegistryValueKind.DWord);
+                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
                 return true;
             }
             catch (Exception ex)

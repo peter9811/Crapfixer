@@ -26,9 +26,9 @@ namespace Settings.System
             return "Disables the Windows network throttling mechanism to potentially improve performance for streaming, gaming, or real-time applications.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, unchecked((int)0xFFFFFFFF));
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, unchecked((int)0xFFFFFFFF)));
         }
 
         public override Task<bool> DoFeature()

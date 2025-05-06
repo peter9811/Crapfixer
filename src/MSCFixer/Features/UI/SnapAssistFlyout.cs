@@ -26,9 +26,9 @@ namespace Settings.Personalization
             return "This feature disables the Snap Assist flyout, which appears when you snap a window.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

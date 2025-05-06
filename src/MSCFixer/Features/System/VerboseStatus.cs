@@ -26,9 +26,9 @@ namespace Settings.System
             return "This method allows you to see what processes are hanging when shutting down and turning on the machine.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                Utils.IntEquals(keyName, valueName, recommendedValue)
          );
         }

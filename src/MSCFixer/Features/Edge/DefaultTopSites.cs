@@ -9,7 +9,7 @@ namespace Settings.Edge
     {
         private const string keyName = @"HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Edge";
         private const string valueName = "NewTabPageHideDefaultTopSites";
-        private const int recommendedValue = 0;
+        private const int recommendedValue = 1;
 
         public override string GetFeatureDetails()
         {
@@ -20,16 +20,16 @@ namespace Settings.Edge
 
         public override string Info() => "Hide default top sites from the new tab page in Microsoft Edge";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()
         {
             try
             {
-                Registry.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
+                Registry.SetValue(keyName, valueName, recommendedValue, Microsoft.Win32.RegistryValueKind.DWord);
 
                 return Task.FromResult(true);
             }
@@ -45,7 +45,7 @@ namespace Settings.Edge
         {
             try
             {
-                Registry.SetValue(keyName, valueName, 1, Microsoft.Win32.RegistryValueKind.DWord);
+                Registry.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
 
                 return true;
             }

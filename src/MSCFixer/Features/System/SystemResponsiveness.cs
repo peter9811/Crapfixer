@@ -26,9 +26,9 @@ namespace Settings.System
             return "Enhances system responsiveness by prioritizing CPU resources for foreground tasks, improving performance during active use.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

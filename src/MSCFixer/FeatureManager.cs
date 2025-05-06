@@ -56,7 +56,7 @@ namespace Crapfixer
             TreeNode node = new TreeNode(text)
             {
                 Tag = featureNode,
-                Checked = true,
+                Checked = featureNode.DefaultChecked,
             };
             treeNodes.Add(node);
 
@@ -67,12 +67,16 @@ namespace Crapfixer
         /// <summary>
         /// Analyzes all checked features recursively and logs only issues.
         /// </summary>
-        public static void AnalyzeAll(TreeNodeCollection nodes)
+        public static async Task AnalyzeAll(TreeNodeCollection nodes)
         {
             ResetAnalysis();
 
+            // Iterate through all nodes and analyze each one recursively
             foreach (TreeNode node in nodes)
-                AnalyzeCheckedRecursive(node);
+            {
+                // Recursively analyze each node and ensure async tasks are awaited
+                await AnalyzeCheckedRecursive(node);
+            }
 
             Logger.Log("🔎 ANALYSIS COMPLETE", LogLevel.Info);
             Logger.Log(new string('=', 50), LogLevel.Info);
@@ -82,46 +86,51 @@ namespace Crapfixer
                 issuesFound > 0 ? LogLevel.Warning : LogLevel.Info);
         }
 
+        /// <summary>
         /// Recursively checks all features and logs misconfigurations.
         /// </summary>
-        private static void AnalyzeCheckedRecursive(TreeNode node)
+        private static async Task AnalyzeCheckedRecursive(TreeNode node)
         {
             if (node.Tag is FeatureNode fn)
             {
+                // If the node is not a category, is checked, and has a feature to check
                 if (!fn.IsCategory && node.Checked && fn.Feature != null)
                 {
                     totalChecked++;
-                    bool isOk = fn.Feature.CheckFeature();
+                    bool isOk = await fn.Feature.CheckFeature();  // Await the async operation
 
                     if (!isOk)
                     {
                         issuesFound++;
-                        node.ForeColor = Color.Red; // misconfigured
+                        node.ForeColor = Color.Red; // Mark as misconfigured
                         string category = node.Parent?.Text ?? "General";
                         Logger.Log($"❌ [{category}] {fn.Name} - Not configured as recommended.");
                         Logger.Log($"   ➤ {fn.Feature.GetFeatureDetails()}");
-                        // log a separator when an issue was found
+                        // Log a separator when an issue was found
                         Logger.Log(new string('-', 50), LogLevel.Info);
                     }
                     else
                     {
-                        node.ForeColor = Color.Gray; // properly configured
+                        node.ForeColor = Color.Gray; // Mark as properly configured
                     }
                 }
 
+                // Recursively process child nodes and ensure awaiting the tasks
                 foreach (TreeNode child in node.Nodes)
-                    AnalyzeCheckedRecursive(child);
+                {
+                    await AnalyzeCheckedRecursive(child);  // Recursively call and await the result
+                }
             }
         }
 
         /// <summary>
         /// Analyzes a selected feature and logs its status.
         /// </summary>
-        public static void AnalyzeFeature(TreeNode node)
+        public static async void AnalyzeFeature(TreeNode node)
         {
             if (node.Tag is FeatureNode fn && !fn.IsCategory && node.Checked && fn.Feature != null)
             {
-                bool isOk = fn.Feature.CheckFeature();
+                bool isOk = await fn.Feature.CheckFeature();
                 node.ForeColor = isOk ? Color.Gray : Color.Red;
 
                 Logger.Log(isOk

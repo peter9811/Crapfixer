@@ -26,9 +26,9 @@ namespace Settings.Personalization
             return "This feature will allow pinning more Apps on start menu";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

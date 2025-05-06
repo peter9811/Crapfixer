@@ -20,10 +20,10 @@ namespace Settings.Ads
             return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
             return
-                Utils.IntEquals(keyName, valueName, 0);
+                Task.FromResult(Utils.IntEquals(keyName, valueName, 0));
         }
 
         public override Task<bool> DoFeature()

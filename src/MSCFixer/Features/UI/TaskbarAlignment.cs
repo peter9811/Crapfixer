@@ -27,9 +27,9 @@ namespace Settings.Personalization
             return "This feature will align the Start button to left";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return (
+            return Task.FromResult(
                    Utils.IntEquals(keyName, valueName, recommendedValue)
              );
         }

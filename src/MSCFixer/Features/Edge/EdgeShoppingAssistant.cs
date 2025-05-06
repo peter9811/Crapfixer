@@ -20,9 +20,9 @@ namespace Settings.Edge
 
         public override string Info() => "Shopping in Microsoft Edge feature will automatically find you the best prices and coupons from across the web as you shop";
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.IntEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()

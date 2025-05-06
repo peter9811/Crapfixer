@@ -26,9 +26,9 @@ namespace Settings.System
             return "Speeds up the appearance of menus and submenus by lowering the default delay. This improves the perceived responsiveness of the UI.";
         }
 
-        public override bool CheckFeature()
+        public override Task<bool> CheckFeature()
         {
-            return Utils.StringEquals(keyName, valueName, recommendedValue);
+            return Task.FromResult(Utils.StringEquals(keyName, valueName, recommendedValue));
         }
 
         public override Task<bool> DoFeature()
