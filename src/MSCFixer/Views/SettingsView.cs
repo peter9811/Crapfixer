@@ -38,12 +38,30 @@ namespace Views
 
             if (result == DialogResult.Yes)
             {
-                System.Diagnostics.Process.Start(new ProcessStartInfo
+                var donationChoice = MessageBox.Show(
+                    "Would you like to donate via PayPal? (Click No for Ko-fi)",
+                    "Choose Your Support Method",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+
+                if (donationChoice == DialogResult.Yes)
                 {
-                    FileName = "https://paypal.com/donate?hosted_button_id=MY7HX4QLYR4KG",
-                    UseShellExecute = true
-                });
+                    System.Diagnostics.Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ",
+                        UseShellExecute = true
+                    });
+                }
+                else if (donationChoice == DialogResult.No)
+                {
+                    System.Diagnostics.Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "https://ko-fi.com/builtbybel",
+                        UseShellExecute = true
+                    });
+                }
             }
         }
+
     }
 }

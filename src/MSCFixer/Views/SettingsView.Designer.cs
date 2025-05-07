@@ -107,9 +107,9 @@
             this.btnDonate.ForeColor = System.Drawing.Color.White;
             this.btnDonate.Location = new System.Drawing.Point(194, 65);
             this.btnDonate.Name = "btnDonate";
-            this.btnDonate.Size = new System.Drawing.Size(179, 31);
+            this.btnDonate.Size = new System.Drawing.Size(207, 39);
             this.btnDonate.TabIndex = 240;
-            this.btnDonate.Text = "Help me Launch Version 1.0 🚀";
+            this.btnDonate.Text = "Like Crapfixer? Support future updates on Ko-fi or PayPal";
             this.btnDonate.UseVisualStyleBackColor = false;
             this.btnDonate.Click += new System.EventHandler(this.btnDonate_Click);
             // 
@@ -133,31 +133,27 @@
             // 
             this.button1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
             this.button1.Enabled = false;
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.button1.Location = new System.Drawing.Point(10, 49);
+            this.button1.Location = new System.Drawing.Point(10, 53);
             this.button1.Name = "button1";
-            this.button1.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.button1.Size = new System.Drawing.Size(127, 30);
+            this.button1.Size = new System.Drawing.Size(107, 34);
             this.button1.TabIndex = 241;
             this.button1.Text = "Settings";
-            this.button1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button1.UseVisualStyleBackColor = false;
             // 
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(242)))), ((int)(((byte)(242)))), ((int)(((byte)(242)))));
-            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.Gainsboro;
+            this.button2.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
             this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button2.Font = new System.Drawing.Font("Tahoma", 8F);
             this.button2.Location = new System.Drawing.Point(10, 13);
             this.button2.Name = "button2";
-            this.button2.Padding = new System.Windows.Forms.Padding(20, 0, 0, 0);
-            this.button2.Size = new System.Drawing.Size(127, 30);
+            this.button2.Size = new System.Drawing.Size(107, 34);
             this.button2.TabIndex = 242;
             this.button2.Text = "About";
-            this.button2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button2.UseVisualStyleBackColor = false;
             // 
             // SettingsView

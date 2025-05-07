@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -40,7 +41,37 @@ namespace Crapfixer
             Logger.Log($"(Checked against {_appDirectory.Count} apps from the system)");
         }
 
-        // Aanalyzes the apps based on predefined apps (from resources) and returns matching apps
+        /// <summary>
+        /// Analyzes the apps based on predefined apps (from resources) and logs the results in MainForm.
+        /// </summary>
+        /// <param name="predefinedApps"></param>
+        /// <returns></returns>
+        public async Task<List<AppAnalysisResult>> AnalyzeAndLogAppsAsync(string[] predefinedApps)
+        {
+            var apps = await AnalyzeAppsAsync(predefinedApps);
+
+            if (apps.Count > 0)
+            {
+                Logger.Log("Bloatware apps detected:", LogLevel.Info);
+                foreach (var app in apps)
+                {
+                    Logger.Log($"❌ {app.AppName} [{app.FullName}]", LogLevel.Warning);
+                }
+            }
+            else
+            {
+                Logger.Log("✅ No Microsoft Store bloatware apps found.", LogLevel.Info);
+            }
+
+            return apps;
+        }
+
+
+        /// <summary>
+        /// Analyzes the apps based on predefined apps (from resources) and returns matching apps.
+        /// </summary>
+        /// <param name="predefinedApps"></param>
+        /// <returns></returns>
         public async Task<List<AppAnalysisResult>> AnalyzeAppsAsync(string[] predefinedApps)
         {
             Logger.Log("\n🧩 APPS ANALYSIS", LogLevel.Info);
@@ -100,7 +131,11 @@ namespace Crapfixer
             }
         }
 
-        // Uninstall selected apps and log the results
+        /// <summary>
+        /// Uninstalls the selected apps and logs the results.
+        /// </summary>
+        /// <param name="selectedApps"></param>
+        /// <returns></returns>
         public async Task<List<string>> UninstallSelectedAppsAsync(List<string> selectedApps)
         {
             List<string> removedApps = new List<string>();
@@ -133,6 +168,51 @@ namespace Crapfixer
             Logger.Log("App cleanup complete.");
 
             return removedApps; // Return removed apps to update the UI
+        }
+
+        /// <summary>
+        /// Loads an external bloatware list from the CFEnhancer text file (comma-separated).
+        /// Falls back to an empty array if the file doesn't exist or fails to load.
+        /// </summary>
+        public string[] LoadExternalBloatwareList(string fileName = "CFEnhancer.txt")
+        {
+            try
+            {
+                string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+                string fullPath = Path.Combine(exeDir, fileName);
+
+                if (!File.Exists(fullPath))
+                {
+                    Logger.Log($"⚠️ The bloatware radar stays basic for now 🧠. Get the enhanced detection list from the GitHub releases (Assets).", LogLevel.Warning);
+                    return Array.Empty<string>();
+                }
+
+                var content = File.ReadAllText(fullPath);
+                return content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                              .Select(s => s.Trim())
+                              .ToArray();
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"Error reading external bloatware file: {ex.Message}", LogLevel.Warning);
+                return Array.Empty<string>();
+            }
+        }
+
+
+        /// <summary>
+        /// OPTIONALLY!Returns all installed apps in the system. 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<AppAnalysisResult>> GetAllInstalledAppsAsync()
+        {
+            await LoadAppsAsync();
+
+            return _appDirectory.Select(kvp => new AppAnalysisResult
+            {
+                AppName = kvp.Key,
+                FullName = kvp.Value
+            }).ToList();
         }
     }
 }

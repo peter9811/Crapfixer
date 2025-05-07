@@ -1,4 +1,5 @@
 ﻿using Features;
+using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -124,26 +125,6 @@ namespace Crapfixer
         }
 
         /// <summary>
-        /// Analyzes a selected feature and logs its status.
-        /// </summary>
-        public static async void AnalyzeFeature(TreeNode node)
-        {
-            if (node.Tag is FeatureNode fn && !fn.IsCategory && node.Checked && fn.Feature != null)
-            {
-                bool isOk = await fn.Feature.CheckFeature();
-                node.ForeColor = isOk ? Color.Gray : Color.Red;
-
-                Logger.Log(isOk
-                    ? $"✅ Feature: {fn.Name} is properly configured."
-                    : $"❌ Feature: {fn.Name} requires attention.\n   ➤ {fn.Feature.GetFeatureDetails()}",
-                    isOk ? LogLevel.Info : LogLevel.Warning);
-
-                if (!isOk)
-                    Logger.Log(new string('-', 50), LogLevel.Info);
-            }
-        }
-
-        /// <summary>
         /// Fixes all checked features recursively.
         /// </summary>
         public static async Task FixChecked(TreeNode node)
@@ -186,12 +167,36 @@ namespace Crapfixer
             }
         }
 
+
+        /// <summary>
+        /// Analyzes a selected feature and logs its status.
+        /// </summary>
+        public static async void AnalyzeFeature(TreeNode node)
+        {
+            // no && node.Checked 
+            if (node.Tag is FeatureNode fn && !fn.IsCategory && fn.Feature != null)
+            {
+                bool isOk = await fn.Feature.CheckFeature();
+                node.ForeColor = isOk ? Color.Gray : Color.Red;
+
+                Logger.Log(isOk
+                    ? $"✅ Feature: {fn.Name} is properly configured."
+                    : $"❌ Feature: {fn.Name} requires attention.\n   ➤ {fn.Feature.GetFeatureDetails()}",
+                    isOk ? LogLevel.Info : LogLevel.Warning);
+
+                if (!isOk)
+                    Logger.Log(new string('-', 50), LogLevel.Info);
+            }
+        }
+
+
         /// <summary>
         /// Attempts to fix the selected feature and logs the result.
         /// </summary>
         public static async Task FixFeature(TreeNode node)
         {
-            if (node.Tag is FeatureNode fn && !fn.IsCategory && node.Checked && fn.Feature != null)
+            // no && node.Checked 
+            if (node.Tag is FeatureNode fn && !fn.IsCategory && fn.Feature != null)
             {
                 bool result = await fn.Feature.DoFeature();
                 Logger.Log(result
@@ -206,7 +211,8 @@ namespace Crapfixer
         /// </summary>
         public static void RestoreFeature(TreeNode node)
         {
-            if (node.Tag is FeatureNode fn && !fn.IsCategory && node.Checked && fn.Feature != null)
+            // no && node.Checked 
+            if (node.Tag is FeatureNode fn && !fn.IsCategory && fn.Feature != null)
             {
                 bool ok = fn.Feature.UndoFeature();
                 Logger.Log(ok
@@ -235,5 +241,21 @@ namespace Crapfixer
                 MessageBox.Show("⚠️ No feature selected or feature is invalid.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        /// <summary>
+        /// Opens the default web browser to search for help online for the selected feature (Extended ShowHelp).
+        /// </summary>
+        /// <param name="node"></param>
+        public static void ShowHelpOnline(TreeNode node)
+        {
+            if (node?.Tag is FeatureNode fn)
+            {
+                string searchQuery = Uri.EscapeDataString( fn.Feature.GetFeatureDetails());
+                string webUrl = $"microsoft-edge:https://www.google.com/search?q={searchQuery}";
+
+                System.Diagnostics.Process.Start(webUrl);
+            }
+        }
+
     }
 }
