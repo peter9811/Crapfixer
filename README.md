@@ -1,4 +1,4 @@
-
+# Crapf🧼xer
 # the tool that says what everyone’s thinking
 ## the tool Microsoft would build, if they hated bloatware as much as we do
 
