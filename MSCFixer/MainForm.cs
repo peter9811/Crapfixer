@@ -52,14 +52,14 @@ namespace Crapfixer
                 navigationHandler.SetActive(btnSettings);
             };
 
-            linkHelp.Click += (s, e) =>
+            linkUpdateCheck.Click += (s, e) =>
 
             {
                 Process.Start("https://github.com/builtbybel/Crapfixer/issues");
             };
 
             UpdateTitleWithOSVersion();             // Update OS version label
-            this.lblVersionInfo.Text = $"v{Program.GetCurrentVersionTostring()} ";  // Update version label
+            this.lblVersionInfo.Text = $"v{Program.GetAppVersion()} ";  // Update version label
         }
 
         private async void UpdateTitleWithOSVersion()
@@ -313,6 +313,17 @@ namespace Crapfixer
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             IniStateManager.Save(treeFeatures, iniPath);
+        }
+
+        private void linkUpdateCheck_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            string version = Program.GetAppVersion();
+            string url = $"https://builtbybel.github.io/Crapfixer/update-check.html?version={version}";
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true
+            });
         }
     }
 }

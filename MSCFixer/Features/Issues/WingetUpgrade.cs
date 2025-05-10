@@ -9,7 +9,7 @@ namespace Settings.System
     {
         public override string GetFeatureDetails()
         {
-            return "Launches Windows Terminal to check and upgrade all installed apps via winget.";
+            return "winget upgrade --include-unknown";
         }
 
         public override string ID()

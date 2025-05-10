@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
 
 // This file is part of MSCFixer.
 namespace Crapfixer
@@ -78,6 +80,5 @@ namespace Crapfixer
                 Logger.Log("Failed to restart Explorer: " + ex.Message, LogLevel.Error);
             }
         }
-
     }
 }
