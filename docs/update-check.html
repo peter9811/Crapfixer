@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crapfixer Update Check</title>
+  <meta charset="UTF-8">
+</head>
+<body>
+  <h1>🔍 Crapfixer Update Check</h1>
+  <p id="status"></p>
+
+  <script>
+    const latestVersion = "0.51.150";
+
+    function compareVersions(v1, v2) {
+      const a = v1.split('.').map(Number);
+      const b = v2.split('.').map(Number);
+      for (let i = 0; i < Math.max(a.length, b.length); i++) {
+        if ((a[i] || 0) < (b[i] || 0)) return -1;
+        if ((a[i] || 0) > (b[i] || 0)) return 1;
+      }
+      return 0;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const userVersion = params.get("version");
+
+    const status = document.getElementById("status");
+
+    if (!userVersion) {
+      status.innerText = "❓ No version provided. Append ?version=0.51.100 to the URL.";
+    } else {
+      const result = compareVersions(userVersion, latestVersion);
+      if (result < 0) {
+        status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/Crapfixer/releases">⬇️ Download here</a>`;
+      } else {
+        status.innerHTML = `✅ Your version (${userVersion}) is up to date.`;
+      }
+    }
+  </script>
+</body>
+</html>
