@@ -45,6 +45,21 @@
       margin-right: 1rem;
       display: inline-block;
     }
+    .project-follow {
+      margin-top: 1rem;
+      text-align: center;
+    }
+    .project-follow a {
+      padding: 10px 20px;
+      background-color: #0077cc;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 16px;
+    }
+    .project-follow a:hover {
+      background-color: #005fa3;
+    }
   </style>
 </head>
 <body>
@@ -53,11 +68,15 @@
 
   <div class="donate">
     <strong>💖 Support Crapfixer</strong>
-    Every donation helps me provide more updates.  
+    Every donation helps us provide more updates.  
     - Thanks, Belim 🙏  
     <br><br>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ" target="_blank">💸 Donate via PayPal</a>
-    <a href="https://ko-fi.com/builtbybel" target="_blank">☕ Buy me a Ko-fi</a>
+    <a href="https://www.paypal.com/donate/YOUR-LINK" target="_blank">💸 Donate via PayPal</a>
+    <a href="https://ko-fi.com/YOUR-KOFI" target="_blank">☕ Buy me a Ko-fi</a>
+  </div>
+
+  <div class="project-follow">
+    <a href="https://github.com/builtbybel/Crapfixer" target="_blank">🌟 Follow the Project</a>
   </div>
 
   <script>
@@ -82,13 +101,14 @@
       status.innerText = "❓ No version found. Please open this page from the Crapfixer app.";
     } else {
       const result = compareVersions(userVersion, latestVersion);
-  if (result < 0) {
-    status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/Crapfixer/releases">⬇️ Download here</a>`;
-  } else if (result === 0) {
-    status.innerHTML = `✅ Your version (${userVersion}) is up to date.`;
-  } else {
-    status.innerHTML = `✅ Your version (${userVersion}) is newer than the official release (${latestVersion}).<br><em>Note: You may be using a development build.</em>`;
-  }
+      
+      if (result < 0) {
+        status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/Crapfixer/releases">⬇️ Download here</a>`;
+      } else if (result === 0) {
+        status.innerHTML = `✅ Your version (${userVersion}) is up to date.`;
+      } else {
+        status.innerHTML = `✅ Your version (${userVersion}) is newer than the official release (${latestVersion}).<br><em>Note: You may be using a development build.</em>`;
+      }
     }
   </script>
 </body>
