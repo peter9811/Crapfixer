@@ -1,5 +1,6 @@
 ﻿using MSCFixer;
 using MSCFixer.Properties;
+using MSCFixer.Views;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -8,15 +9,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Views;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Crapfixer
 {
     public partial class MainForm : Form
     {
+        private readonly string iniPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Crapfixer.ini");
+
         private NavigationManager navigationManager;
         private NavigationHandler navigationHandler;
         private readonly AppManagerService appManager = new AppManagerService();
-        private readonly string iniPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Crapfixer.ini");
 
         public MainForm()
         {
@@ -25,18 +28,17 @@ namespace Crapfixer
             Logger.OutputBox = rtbLogger;
             FeatureNodeManager.LoadFeatures(treeFeatures);
             PluginManager.LoadPlugins(treeFeatures);
-      
+            IniStateManager.Load(treeFeatures, iniPath);
         }
 
         private void MainForm_Shown(object sender, EventArgs e)
         {
             InitializeUI();
-            IniStateManager.Load(treeFeatures, iniPath);
         }
 
         private void InitializeUI()
         {
-            navigationHandler = new NavigationHandler(btnHome, btnRestore, btnSettings);
+            navigationHandler = new NavigationHandler(btnHome, btnSettings);
 
             btnHome.Click += (s, e) =>
             {
@@ -44,14 +46,9 @@ namespace Crapfixer
                 navigationHandler.SetActive(btnHome);
             };
 
-            btnRestore.Click += (s, e) =>
-            {
-                navigationHandler.SetActive(btnRestore);
-            };
-
             btnSettings.Click += (s, e) =>
             {
-                navigationManager.SwitchView(new SettingsView(navigationManager));
+                navigationManager.SwitchView(new OptionsView(navigationManager));
                 navigationHandler.SetActive(btnSettings);
             };
 
@@ -106,7 +103,7 @@ namespace Crapfixer
                     .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(s => s.Trim()).ToArray() ?? Array.Empty<string>();
 
-               // Logger.Log("Using built-in bloatware list.", LogLevel.Info);
+                // Logger.Log("Using built-in bloatware list.", LogLevel.Info);
             }
             else
             {
@@ -126,7 +123,6 @@ namespace Crapfixer
                 Logger.Log("✅ No bloatware apps found.", LogLevel.Info);
             }
         }
-
 
         private async void btnFix_Click(object sender, EventArgs e)
         {
