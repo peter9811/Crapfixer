@@ -33,7 +33,7 @@ _Heads up: The updated code for Crapfixer will be committed to GitHub soon if th
 - **Streamline Performance:** Tweak your system for a smoother experience.
 - **User-Friendly & Safe:** Classic UI, with reversible changes for peace of mind.
 
-# How to Use Crapfixer
+## How to Use Crapfixer
 
 Using Crapfixer is designed to be straightforward:
 
