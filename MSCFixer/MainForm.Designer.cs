@@ -52,7 +52,7 @@
             this.lblHeader = new System.Windows.Forms.Label();
             this.pictureHeader = new System.Windows.Forms.PictureBox();
             this.btnRestore = new System.Windows.Forms.Button();
-            this.linkHelp = new System.Windows.Forms.LinkLabel();
+            this.linkUpdateCheck = new System.Windows.Forms.LinkLabel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnHome = new System.Windows.Forms.Button();
             this.linkSelection = new System.Windows.Forms.LinkLabel();
@@ -345,21 +345,22 @@
             this.btnRestore.UseVisualStyleBackColor = true;
             this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
             // 
-            // linkHelp
+            // linkUpdateCheck
             // 
-            this.linkHelp.ActiveLinkColor = System.Drawing.Color.Blue;
-            this.linkHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkHelp.AutoEllipsis = true;
-            this.linkHelp.AutoSize = true;
-            this.linkHelp.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.linkHelp.LinkColor = System.Drawing.Color.White;
-            this.linkHelp.Location = new System.Drawing.Point(620, 447);
-            this.linkHelp.Name = "linkHelp";
-            this.linkHelp.Size = new System.Drawing.Size(63, 13);
-            this.linkHelp.TabIndex = 203;
-            this.linkHelp.TabStop = true;
-            this.linkHelp.Text = "GitHub Help";
-            this.linkHelp.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.linkUpdateCheck.ActiveLinkColor = System.Drawing.Color.Blue;
+            this.linkUpdateCheck.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkUpdateCheck.AutoEllipsis = true;
+            this.linkUpdateCheck.AutoSize = true;
+            this.linkUpdateCheck.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.linkUpdateCheck.LinkColor = System.Drawing.Color.White;
+            this.linkUpdateCheck.Location = new System.Drawing.Point(595, 447);
+            this.linkUpdateCheck.Name = "linkUpdateCheck";
+            this.linkUpdateCheck.Size = new System.Drawing.Size(95, 13);
+            this.linkUpdateCheck.TabIndex = 203;
+            this.linkUpdateCheck.TabStop = true;
+            this.linkUpdateCheck.Text = "Check for updates";
+            this.linkUpdateCheck.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            this.linkUpdateCheck.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkUpdateCheck_LinkClicked);
             // 
             // btnSettings
             // 
@@ -391,7 +392,7 @@
             this.btnHome.Size = new System.Drawing.Size(99, 69);
             this.btnHome.TabIndex = 206;
             this.btnHome.TabStop = false;
-            this.btnHome.Text = "&Home";
+            this.btnHome.Text = "&Fixer";
             this.btnHome.UseVisualStyleBackColor = false;
             // 
             // linkSelection
@@ -422,7 +423,7 @@
             this.Controls.Add(this.btnSettings);
             this.Controls.Add(this.panelHeader);
             this.Controls.Add(this.btnRestore);
-            this.Controls.Add(this.linkHelp);
+            this.Controls.Add(this.linkUpdateCheck);
             this.Controls.Add(this.panelContainer);
             this.Name = "MainForm";
             this.ShowIcon = false;
@@ -467,7 +468,7 @@
         private System.Windows.Forms.CheckedListBox checkedListBoxApps;
         private System.Windows.Forms.ToolStripSeparator seperatorToolStripMenuItem;
         private System.Windows.Forms.Panel panelContent;
-        private System.Windows.Forms.LinkLabel linkHelp;
+        private System.Windows.Forms.LinkLabel linkUpdateCheck;
         private System.Windows.Forms.ToolStripMenuItem helpMarkedFeatureToolStripMenuItem;
         private System.Windows.Forms.TreeView treeFeatures;
         private System.Windows.Forms.Label lblOSInfo;
