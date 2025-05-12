@@ -2,12 +2,12 @@
 {
     partial class OptionsView
     {
-        /// <summary> 
+        /// <summary>
         /// Erforderliche Designervariable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
+        /// <summary>
         /// Verwendete Ressourcen bereinigen.
         /// </summary>
         /// <param name="disposing">True, wenn verwaltete Ressourcen gelöscht werden sollen; andernfalls False.</param>
@@ -22,8 +22,8 @@
 
         #region Vom Komponenten-Designer generierter Code
 
-        /// <summary> 
-        /// Erforderliche Methode für die Designerunterstützung. 
+        /// <summary>
+        /// Erforderliche Methode für die Designerunterstützung.
         /// Der Inhalt der Methode darf nicht mit dem Code-Editor geändert werden.
         /// </summary>
         private void InitializeComponent()
@@ -34,9 +34,9 @@
             this.btnSettingsMenu = new System.Windows.Forms.Button();
             this.panelSettings.SuspendLayout();
             this.SuspendLayout();
-            // 
+            //
             // panelSettings
-            // 
+            //
             this.panelSettings.BackColor = System.Drawing.Color.White;
             this.panelSettings.Controls.Add(this.panelSubContent);
             this.panelSettings.Controls.Add(this.btnAboutMenu);
@@ -46,20 +46,20 @@
             this.panelSettings.Name = "panelSettings";
             this.panelSettings.Size = new System.Drawing.Size(625, 395);
             this.panelSettings.TabIndex = 243;
-            // 
+            //
             // panelSubContent
-            // 
-            this.panelSubContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.panelSubContent.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panelSubContent.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelSubContent.Location = new System.Drawing.Point(135, 14);
             this.panelSubContent.Name = "panelSubContent";
             this.panelSubContent.Size = new System.Drawing.Size(474, 363);
             this.panelSubContent.TabIndex = 246;
-            // 
+            //
             // btnAboutMenu
-            // 
+            //
             this.btnAboutMenu.BackColor = System.Drawing.Color.White;
             this.btnAboutMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
             this.btnAboutMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -71,9 +71,9 @@
             this.btnAboutMenu.Text = "About";
             this.btnAboutMenu.UseVisualStyleBackColor = false;
             this.btnAboutMenu.Click += new System.EventHandler(this.btnAboutMenu_Click);
-            // 
+            //
             // btnSettingsMenu
-            // 
+            //
             this.btnSettingsMenu.BackColor = System.Drawing.Color.White;
             this.btnSettingsMenu.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(153)))), ((int)(((byte)(180)))), ((int)(((byte)(209)))));
             this.btnSettingsMenu.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -85,11 +85,11 @@
             this.btnSettingsMenu.Text = "Settings";
             this.btnSettingsMenu.UseVisualStyleBackColor = false;
             this.btnSettingsMenu.Click += new System.EventHandler(this.btnSettingsMenu_Click);
-            // 
+            //
             // OptionsView
-            // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //
+            this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.Controls.Add(this.panelSettings);
             this.Name = "OptionsView";
             this.Size = new System.Drawing.Size(625, 395);
