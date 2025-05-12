@@ -1,115 +1,123 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Crapfixer Update Check</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f6f8;
-      color: #333;
-      padding: 2rem;
-      max-width: 600px;
-      margin: auto;
-    }
-    h1 {
-      color: #2c3e50;
-    }
-    #status {
-      background: #fff;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-top: 1rem;
-    }
-    a {
-      color: #0077cc;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-    .donate {
-      margin-top: 3rem;
-      padding: 1rem;
-      background-color: #e8f5e9;
-      border-left: 5px solid #4caf50;
-      border-radius: 5px;
-    }
-    .donate strong {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-    .donate a {
-      margin-right: 1rem;
-      display: inline-block;
-    }
-    .project-follow {
-      margin-top: 1rem;
-      text-align: center;
-    }
-    .project-follow a {
-      padding: 10px 20px;
-      background-color: #24292f; /* GitHub Dark Blue */
-      color: white;
-      border-radius: 5px;
-      text-decoration: none;
-      font-size: 16px;
-    }
-    .project-follow a:hover {
-      background-color: #0366d6; /* GitHub Blue */
-    }
-  </style>
-</head>
-<body>
-  <h1>🔍 Crapfixer Update Check</h1>
-  <p id="status">Checking version...</p>
-
-  <div class="donate">
-    <strong>💖 Support Crapfixer</strong>
-    Every donation helps me provide more updates.  
-    - Thanks, Belim 🙏  
-    <br><br>
-    <a href="https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ" target="_blank">💸 Donate via PayPal</a>
-    <a href="https://ko-fi.com/builtbybel" target="_blank">☕ Buy me a Ko-fi</a>
-  </div>
-
-  <div class="project-follow">
-    <a href="https://github.com/builtbybel/Crapfixer" target="_blank">🐙 Follow the Project on GitHub</a>
-  </div>
-
-  <script>
-    const latestVersion = "0.55.160";
-
-    function compareVersions(v1, v2) {
-      const a = v1.split('.').map(Number);
-      const b = v2.split('.').map(Number);
-      for (let i = 0; i < Math.max(a.length, b.length); i++) {
-        if ((a[i] || 0) < (b[i] || 0)) return -1;
-        if ((a[i] || 0) > (b[i] || 0)) return 1;
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crapfixer Update Check</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f8;
+        color: #333;
+        padding: 2rem;
+        max-width: 600px;
+        margin: auto;
       }
-      return 0;
-    }
+      h1 {
+        color: #2c3e50;
+      }
+      #status {
+        background: #fff;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: 1rem;
+      }
+      a {
+        color: #0077cc;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .donate {
+        margin-top: 3rem;
+        padding: 1rem;
+        background-color: #e8f5e9;
+        border-left: 5px solid #4caf50;
+        border-radius: 5px;
+      }
+      .donate strong {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .donate a {
+        margin-right: 1rem;
+        display: inline-block;
+      }
+      .project-follow {
+        margin-top: 1rem;
+        text-align: center;
+      }
+      .project-follow a {
+        padding: 10px 20px;
+        background-color: #24292f; /* GitHub Dark Blue */
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 16px;
+      }
+      .project-follow a:hover {
+        background-color: #0366d6; /* GitHub Blue */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🔍 Crapfixer Update Check</h1>
+    <p id="status">Checking version...</p>
 
-    const params = new URLSearchParams(window.location.search);
-    const userVersion = params.get("version");
+    <div class="donate">
+      <strong>💖 Support Crapfixer</strong>
+      Every donation helps me provide more updates. - Thanks, Belim 🙏
+      <br /><br />
+      <a
+        href="https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ"
+        target="_blank"
+        >💸 Donate via PayPal</a
+      >
+      <a href="https://ko-fi.com/builtbybel" target="_blank"
+        >☕ Buy me a Ko-fi</a
+      >
+    </div>
 
-    const status = document.getElementById("status");
+    <div class="project-follow">
+      <a href="https://github.com/builtbybel/Crapfixer" target="_blank"
+        >🐙 Follow the Project on GitHub</a
+      >
+    </div>
 
-    if (!userVersion) {
-      status.innerText = "❓ No version found. Please open this page from the Crapfixer app.";
-    } else {
-      const result = compareVersions(userVersion, latestVersion);
-      
-      if (result < 0) {
-        status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/Crapfixer/releases">⬇️ Download here</a>`;
-      } else if (result === 0) {
-        status.innerHTML = `✅ Your version (${userVersion}) is up to date.`;
+    <script>
+      const latestVersion = "0.55.160";
+
+      function compareVersions(v1, v2) {
+        const a = v1.split(".").map(Number);
+        const b = v2.split(".").map(Number);
+        for (let i = 0; i < Math.max(a.length, b.length); i++) {
+          if ((a[i] || 0) < (b[i] || 0)) return -1;
+          if ((a[i] || 0) > (b[i] || 0)) return 1;
+        }
+        return 0;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const userVersion = params.get("version");
+
+      const status = document.getElementById("status");
+
+      if (!userVersion) {
+        status.innerText =
+          "❓ No version found. Please open this page from the Crapfixer app.";
       } else {
-        status.innerHTML = `✅ Your version (${userVersion}) is newer than the official release (${latestVersion}).<br><em>Note: You may be using a development build.</em>`;
+        const result = compareVersions(userVersion, latestVersion);
+
+        if (result < 0) {
+          status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/Crapfixer/releases">⬇️ Download here</a>`;
+        } else if (result === 0) {
+          status.innerHTML = `✅ Your version (${userVersion}) is up to date.`;
+        } else {
+          status.innerHTML = `✅ Your version (${userVersion}) is newer than the official release (${latestVersion}).<br><em>Note: You may be using a development build.</em>`;
+        }
       }
-    }
-  </script>
-</body>
+    </script>
+  </body>
 </html>
