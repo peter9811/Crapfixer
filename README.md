@@ -18,7 +18,7 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 If you like old-school tools that just work, youre gonna feel right at home
 If there's enough interest, I'll also commit the updated code to GitHub soon
 
-![GqRlLHgW8AAWJnf](https://github.com/user-attachments/assets/15a259e7-0397-4750-8d67-56408a878f0f)
+![explorer_zoROhca26u](https://github.com/user-attachments/assets/cb568d53-113e-4a14-8c88-30e822b45bd3)
 
 
 # How to use
