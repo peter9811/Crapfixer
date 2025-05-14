@@ -25,3 +25,8 @@ url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugi
 [Uninstall OneDrive]
 description=Completely uninstalls Microsoft OneDrive from the system.
 url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugins/Uninstall OneDrive.ps1
+
+[CFEnhancer]
+description=Enhanced bloatware detection list used instead of the internal signature. If present in the plugins folder, it overrides the built-in bloatware detection mechanism.
+url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugins/CFEnhancer.txt
+
