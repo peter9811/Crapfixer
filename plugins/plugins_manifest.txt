@@ -1,0 +1,5 @@
+[plugin1]
+name=ChrisTitusApp
+description=Chris Titus Tech's Windows Utility - Install Programs, Tweaks, Fixes, and Updates
+url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugins/ChrisTitusApp.ps1
+
