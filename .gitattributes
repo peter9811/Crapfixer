@@ -1,14 +1,7 @@
-# C#
-*.cs linguist-language=C#
-*.csx linguist-language=C#
-
-# HTML
-*.html linguist-language=HTML
-
-# JavaScript
-*.js linguist-language=JavaScript
-*.jsx linguist-language=JavaScript
-
-# PowerShell
-*.ps1 linguist-language=PowerShell
-*.psm1 linguist-language=PowerShell
+*.cs linguist-detectable=true
+*.csx linguist-detectable=true
+*.html linguist-detectable=true
+*.js linguist-detectable=true
+*.jsx linguist-detectable=true
+*.ps1 linguist-detectable=true
+*.psm1 linguist-detectable=true
