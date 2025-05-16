@@ -1,32 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Crapfixer Log Analyzer</title>
   <style>
-    body { font-family: sans-serif; margin: 2rem; background: #f4f4f4; }
-    textarea { width: 100%; height: 200px; font-family: monospace; margin-bottom: 1rem; }
-    .result { background: white; border: 1px solid #ddd; padding: 1rem; }
+    /* ---------- Basic Styles ---------- */
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      background: #f0f0f0;
+      color: #333;
+    }
+
+    header {
+      background: #222;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    /* ---------- Top-right Links ---------- */
+    .actions a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+      font-size: 0.9rem;
+      background: #444;
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .actions a:hover {
+      background: #666;
+    }
+
+    /* ---------- Layout ---------- */
+    main {
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    textarea {
+      width: 100%;
+      height: 200px;
+      font-family: monospace;
+      padding: 1rem;
+      border: 1px solid #ccc;
+      background: #fff;
+      border-radius: 5px;
+      resize: vertical;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border: none;
+      background: #1565c0;
+      color: white;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-right: 0.5rem;
+    }
+
+    button:hover {
+      background: #0d47a1;
+    }
+
+    /* ---------- Results Section ---------- */
+    .result {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 1rem;
+      margin-top: 2rem;
+      border-radius: 5px;
+    }
+
     .issue { color: #c62828; margin-bottom: 0.5rem; }
-    .key { font-family: monospace; color: #37474f; }
+    .key { color: #37474f; font-family: monospace; }
     .plugin { color: #1565c0; margin-bottom: 0.3rem; }
+
+    .btn-group {
+      margin-top: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>🧠 Crapfixer Log Analyzer</h1>
-  <p>
-    To get started, please follow these simple steps:
-    <ol>
-      <li>Run the analysis in your Crapfixer app and <strong>export or copy the full log</strong> from the results window.</li>
-      <li>Come back here and <strong>paste the entire log</strong> into the textbox below.</li>
-      <li>Click the <strong>🔍 Analyze</strong> button to see a detailed breakdown of issues, registry keys, and plugin files.</li>
-    </ol>
-  </p>
-  <textarea id="logInput" placeholder="Paste your Crapfixer log here..."></textarea>
-  <button onclick="analyzeLog()">🔍 Analyze</button>
-  <div class="result" id="output"></div>
+  <!-- ---------- HEADER SECTION ---------- -->
+  <header>
+    <h1>🧠 Crapfixer Log Analyzer</h1>
+    <div class="actions">
+      <a href="https://github.com/yourproject" target="_blank">GitHub</a>
+      <a href="https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ" target="_blank">PayPal</a>
+      <a href="https://ko-fi.com/builtbybel" target="_blank">Ko-fi</a>
+    </div>
+  </header>
 
+  <!-- ---------- MAIN CONTENT ---------- -->
+  <main>
+    <p><strong>How it works:</strong></p>
+    <ol>
+      <li>Run the analysis in Crapfixer and <strong>copy the full log</strong>.</li>
+      <li>Paste it into the box below.</li>
+      <li>Click <strong>Analyze</strong> to get results.</li>
+    </ol>
+
+    <!-- ---------- LOG INPUT ---------- -->
+    <textarea id="logInput" placeholder="Drop your Crapfixer log here..."></textarea>
+
+    <!-- ---------- BUTTONS ---------- -->
+    <div class="btn-group">
+      <button onclick="analyzeLog()">🔍 Analyze</button>
+      <button onclick="copyResult()">📋 Copy to Clipboard</button>
+      <button onclick="captureResult()">📸 Take Screenshot</button>
+      <button onclick="shareResult()">📤 Share</button>
+      <button onclick="shareOnTwitter()">🐦 Share on X</button>
+    </div>
+
+    <!-- ---------- OUTPUT AREA ---------- -->
+    <div class="result" id="output"></div>
+  </main>
+
+  <!-- ---------- JAVASCRIPT SECTION ---------- -->
   <script>
+    // Analyze the pasted log and extract issues, registry keys, and plugin info
     function analyzeLog() {
       const log = document.getElementById('logInput').value;
       const output = document.getElementById('output');
@@ -37,7 +143,7 @@
       const plugins = lines.filter(line => line.match(/Plugin ready: .*\.ps1/i));
 
       output.innerHTML = `
-        <h3>🧪 Found ${issues.length} Issues</h3>
+        <h3>🧪 Found ${issues.length} issues</h3>
         <div>${issues.map(i => `<div class="issue">${i}</div>`).join('')}</div>
         <hr>
         <h3>🗂 Registry Keys</h3>
@@ -47,6 +153,60 @@
         <div>${plugins.map(p => `<div class="plugin">${p}</div>`).join('')}</div>
       `;
     }
+
+    // Copy output text to clipboard
+    function copyResult() {
+      const output = document.getElementById('output');
+      if (!output.innerText.trim()) return alert("No results to copy yet.");
+      navigator.clipboard.writeText(output.innerText).then(() =>
+        alert("Results copied to clipboard!")
+      );
+    }
+
+    // Save screenshot of the output section
+    function captureResult() {
+      html2canvas(document.getElementById('output')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'crapfixer-results.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    }
+
+    // Native share (for mobile browsers)
+    function shareResult() {
+      const text = document.getElementById('output').innerText;
+      if (navigator.share) {
+        navigator.share({
+          title: 'Crapfixer Analysis Results',
+          text: text,
+        }).catch(err => console.log('Share failed:', err));
+      } else {
+        alert("Sharing is not supported by your browser.");
+      }
+    }
+
+    // Share the result as an image on Twitter/X
+    function shareOnTwitter() {
+      const outputEl = document.getElementById('output');
+      if (!outputEl.innerText.trim()) return alert("No results to share yet.");
+
+      // Create screenshot from result div
+      html2canvas(outputEl).then(canvas => {
+        const dataUrl = canvas.toDataURL("image/png");
+
+        // Convert image to base64 string (can't upload directly to Twitter)
+        // Instead, show preview and user uploads manually via prompt
+        const win = window.open();
+        win.document.write(`<h2>📷 Screenshot ready for X / Twitter</h2>`);
+        win.document.write(`<p>Right-click the image below and save it to upload on Twitter manually.</p>`);
+        win.document.write(`<img src="${dataUrl}" style="max-width:100%;border:1px solid #ccc;" />`);
+        win.document.write(`<p><a href="https://twitter.com/intent/tweet?text=Check%20out%20my%20Crapfixer%20analysis!&hashtags=crapfixer,loganalyzer" target="_blank">➡️ Click here to post on X</a></p>`);
+      });
+    }
   </script>
+
+  <!-- ---------- HTML2CANVAS LIBRARY FOR SCREENSHOTS ---------- -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 </body>
 </html>
