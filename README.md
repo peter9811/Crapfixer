@@ -16,13 +16,6 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 
 ![Fixing the crap](https://github.com/user-attachments/assets/cb568d53-113e-4a14-8c88-30e822b45bd3)
 
-## Features
-
-- **Debloat Windows:** Say goodbye to unwanted pre-installed apps.
-- **Enhance Privacy:** Take control of data collection settings.
-- **Streamline Performance:** Tweak your system for a smoother experience.
-- **User-Friendly & Safe:** Classic UI with reversible changes for peace of mind.
-
 ## 🚀 How to Use Crapfixer
 
 1. **Launch the Tool**  
