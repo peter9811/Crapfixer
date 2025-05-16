@@ -23,17 +23,27 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 - **Streamline Performance:** Tweak your system for a smoother experience.
 - **User-Friendly & Safe:** Classic UI with reversible changes for peace of mind.
 
-## How to Use Crapfixer
+## 🚀 How to Use Crapfixer
 
-Using Crapfixer is straightforward:
+1. **Launch the Tool**  
+   All optimization options are enabled by default – no need to tweak anything.
 
-1. **Launch the Tool:** All optimization options are enabled by default to save you time.
-2. **Analyze Your System:** Simply click the "Analyze" button. Crapfixer will check your system against the selected options.
-   - Items marked in **red** are recommended fixes.
-   - Items in **gray** are already configured correctly.
-3. **Apply Fixes:** Then just smash the "Run CFixer!" button and you're good to go.
+2. **Analyze Your System**  
+   Click **"Analyze"** to scan your system based on the selected settings.  
+   - **Red** items = Recommended fixes  
+   - **Gray** items = Already optimized
 
-_For full functionality, it's recommended to run the app as Administrator, since certain features - like editing registry values under HKEY_LOCAL_MACHINE - require elevated permissions._
+3. **Apply Fixes**  
+   Smash the **"Run CFixer!"** button to apply the recommended tweaks.
+
+4. **🔍 Optional: Review the Log**  
+   Still unsure about the results?  
+   → Upload your log to the [Online Log Analyzer](https://builtbybel.github.io/Crapfixer/log-analyzer/index.html)  
+   → Get a breakdown of the changes  
+   → Share the link for feedback if needed
+
+> ⚠️ **Tip:** For full functionality, run Crapfixer as **Administrator**.  
+> Some fixes (like registry edits under `HKEY_LOCAL_MACHINE`) need elevated permissions.
 
 ## System Requirements
 
