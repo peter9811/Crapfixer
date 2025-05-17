@@ -143,6 +143,16 @@
 
     <!-- ---------- JAVASCRIPT SECTION ---------- -->
     <script>
+      // intercommunication analyzer <> c# to check if theres a "log" parameter in the Url
+      window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const log = urlParams.get('log');
+      if (log) {
+        document.getElementById('logInput').value = decodeURIComponent(log);
+      }
+    };
+
+      
       // Analyze the pasted log and extract issues, registry keys, and plugin info
       function analyzeLog() {
         const log = document.getElementById("logInput").value;
