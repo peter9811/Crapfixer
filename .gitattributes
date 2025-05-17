@@ -1,6 +1,3 @@
-/docs/**/*.html linguist-documentation=true
-/docs/**/*.htm linguist-documentation=true
-/docs/**/*.js linguist-documentation=true
 *.cs linguist-detectable=true
 *.csx linguist-detectable=true
 *.html linguist-detectable=true
