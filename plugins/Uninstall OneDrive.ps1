@@ -1,3 +1,12 @@
+#Requires -RunAsAdministrator
+
+# Check if running as Administrator
+if (-not ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Warning "This script must be run as Administrator."
+    Start-Process powershell.exe -Verb RunAs -ArgumentList ("-File `"{0}`"" -f $MyInvocation.MyCommand.Path)
+    exit
+}
+
 Import-Module -DisableNameChecking $PSScriptRoot\..\lib\force-mkdir.psm1
 Import-Module -DisableNameChecking $PSScriptRoot\..\lib\take-own.psm1
 
@@ -50,7 +59,7 @@ Write-Output "Restarting explorer"
 Start-Process "explorer.exe"
 
 Write-Output "Waiting for explorer to complete loading"
-Start-Sleep 10
+Start-Sleep 10 # Consider if this sleep is always necessary or could be shorter/conditional
 
 Write-Output "Removing additional OneDrive leftovers"
 foreach ($item in (Get-ChildItem "$env:WinDir\WinSxS\*onedrive*")) {

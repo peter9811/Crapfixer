@@ -1,6 +1,5 @@
 ﻿# Run as Admin
-if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator"))
-{
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to run this script as an Administrator!"
     exit
 }
@@ -15,7 +14,7 @@ $restorePointType = 12  # MODIFY_SETTINGS = 12
 # Function to create restore point with progress reporting
 function Create-RestorePoint {
     Write-Host "Starting to create restore point..." -ForegroundColor Yellow
-    
+
     # Simulate progress
     for ($i = 0; $i -le 100; $i += 10) {
         Write-Progress -Activity "Creating Restore Point" -Status "$i% Complete" -PercentComplete $i
@@ -28,7 +27,7 @@ function Create-RestorePoint {
     }
 
     Write-Host "Restore point created successfully." -ForegroundColor Green
-    
+
     # Show completion message
     [System.Windows.Forms.MessageBox]::Show("Restore point has been created successfully!", "Completion", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
 }
