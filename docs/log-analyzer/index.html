@@ -130,9 +130,8 @@
 
       <!-- ---------- BUTTONS ---------- -->
       <div class="btn-group">
-        <button onclick="pasteFromClipboard()">📋 Paste log from clipboard</button>
+        <button onclick="pasteResult()">📋 Paste log from clipboard</button>
         <button onclick="analyzeLog()">🔍 Analyze</button>
-        <button onclick="copyResult()">📋 Copy to Clipboard</button>
         <button onclick="captureResult()">📸 Take Screenshot</button>
         <button onclick="shareResult()">📤 Share</button>
         <button onclick="shareOnTwitter()">🐦 Share on X</button>
@@ -146,7 +145,7 @@
     <script>
       
     // read text from clipboard
-    async function pasteFromClipboard() {
+    async function pasterResult() {
       try {
         const text = await navigator.clipboard.readText();
         if (!text) {
@@ -180,15 +179,6 @@
         <h3>📦 Loaded Plugins</h3>
         <div>${plugins.map((p) => `<div class="plugin">${p}</div>`).join("")}</div>
       `;
-      }
-
-      // Copy output text to clipboard
-      function copyResult() {
-        const output = document.getElementById("output");
-        if (!output.innerText.trim()) return alert("No results to copy yet.");
-        navigator.clipboard
-          .writeText(output.innerText)
-          .then(() => alert("Results copied to clipboard!"));
       }
 
       // Save screenshot of the output section
