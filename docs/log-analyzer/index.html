@@ -130,6 +130,7 @@
 
       <!-- ---------- BUTTONS ---------- -->
       <div class="btn-group">
+        <button onclick="pasteFromClipboard()">📋 Paste log from clipboard</button>
         <button onclick="analyzeLog()">🔍 Analyze</button>
         <button onclick="copyResult()">📋 Copy to Clipboard</button>
         <button onclick="captureResult()">📸 Take Screenshot</button>
@@ -144,18 +145,21 @@
     <!-- ---------- JAVASCRIPT SECTION ---------- -->
     <script>
       
-    // INTERCOMMUNICATION BETWEEN ANALYZER WEBPAGE AND C#rapfixer APP:
-    // on page load, check if the url contains a "log" parameter
-    // if found, decode it and inject the log directly into the textarea
-    // this enables seamless auto-population of the log for instant analysis
-    window.onload = function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const log = urlParams.get('log');
-      if (log) {
-        document.getElementById('logInput').value = decodeURIComponent(log);
+    // read text from clipboard
+    async function pasteFromClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (!text) {
+          alert("Clipboard is emoty");
+          return;
+        }
+        document.getElementById("logInput").value = text;
+        analyzeLog();                 // !analyze directly!
+      } catch (err) {
+        alert("No access to clipboard " + err);
       }
-    };
-    
+    }
+      
       // Analyze the pasted log and extract issues, registry keys, and plugin info
       function analyzeLog() {
         const log = document.getElementById("logInput").value;
