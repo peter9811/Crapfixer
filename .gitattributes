@@ -5,3 +5,6 @@
 *.jsx linguist-detectable=true
 *.ps1 linguist-detectable=true
 *.psm1 linguist-detectable=true
+
+/docs/** linguist-vendored=false
+/docs/** linguist-generated=false
