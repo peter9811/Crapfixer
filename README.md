@@ -22,8 +22,9 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
    All optimization options are enabled by default – no need to tweak anything.
 
 2. **Analyze Your System**  
-   Click **"Analyze"** to scan your system based on the selected settings.  
-   - **Red** items = Recommended fixes  
+   Click **"Analyze"** to scan your system based on the selected settings.
+
+   - **Red** items = Recommended fixes
    - **Gray** items = Already optimized
 
 3. **Apply Fixes**  
