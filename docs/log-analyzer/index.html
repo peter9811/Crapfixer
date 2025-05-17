@@ -153,7 +153,9 @@
       const log = urlParams.get('log');
       if (log) {
         document.getElementById('logInput').value = decodeURIComponent(log);
-            analyzeLog(); // analyze directly
+                setTimeout(() => {
+                      analyzeLog(); //analyze directly
+                    }, 100);
       }
     };
     
