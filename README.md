@@ -1,4 +1,4 @@
-# Crapf🧼xer
+# CrapF🧼xer
 
 # The tool that says what everyone's thinking
 
