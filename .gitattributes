@@ -4,6 +4,3 @@
 *.js linguist-detectable=true
 *.jsx linguist-detectable=true
 *.ps1 linguist-detectable=true
-*.psm1 linguist-detectable=true
-
-/docs/** linguist-documentation=false
