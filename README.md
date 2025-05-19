@@ -42,6 +42,18 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 > ⚠️ **Tip:** For full functionality, run CrapFixer as **Administrator**.  
 > Some fixes (like registry edits under `HKEY_LOCAL_MACHINE`) need elevated permissions.
 
+### ☕ Motivation ≈ Caffeine
+
+CrapFixer is my newest — and likely last — fine‑tuning app for Windows.  
+I'm committed to keeping it alive for the long haul, and future development will be powered by **voluntary donations**.
+
+---
+
+Every coffee‑sized tip not only fuels new features, it also lowers the risk of *me* throwing a personal **Blue Screen of Death**.
+
+[PayPal](https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ) • [Ko‑fi](https://ko-fi.com/builtbybel) ❤️
+
+
 ## System Requirements
 
 - Windows 11 (Recommended)
