@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Crapfixer Log Analyzer</title>
+    <title>CrapFixer Log Analyzer</title>
     <style>
       /* ---------- Basic Styles ---------- */
       body {
@@ -108,7 +108,7 @@
     <header>
       <h1>🧠 CrapFixer Log Analyzer</h1>
       <div class="actions">
-        <a href="https://github.com/builtbybel/Crapfixer" target="_blank">GitHub</a>
+        <a href="https://github.com/builtbybel/CrapFixer" target="_blank">GitHub</a>
         <a href="https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ" target="_blank"
           >PayPal</a
         >
@@ -120,13 +120,13 @@
     <main>
       <p><strong>How it works:</strong></p>
       <ol>
-        <li>Run the analysis in Crapfixer and <strong>copy the full log</strong>.</li>
+        <li>Run the analysis in CrapFixer and <strong>copy the full log</strong>.</li>
         <li>Paste it into the box below.</li>
         <li>Click <strong>Analyze</strong> to get results.</li>
       </ol>
 
       <!-- ---------- LOG INPUT ---------- -->
-      <textarea id="logInput" placeholder="Drop your Crapfixer log here..."></textarea>
+      <textarea id="logInput" placeholder="Drop your CrapFixer log here..."></textarea>
 
       <!-- ---------- BUTTONS ---------- -->
       <div class="btn-group">
@@ -185,7 +185,7 @@
       function captureResult() {
         html2canvas(document.getElementById("output")).then((canvas) => {
           const link = document.createElement("a");
-          link.download = "crapfixer-results.png";
+          link.download = "CrapFixer-results.png";
           link.href = canvas.toDataURL();
           link.click();
         });
@@ -197,7 +197,7 @@
         if (navigator.share) {
           navigator
             .share({
-              title: "Crapfixer Analysis Results",
+              title: "CrapFixer Analysis Results",
               text: text,
             })
             .catch((err) => console.log("Share failed:", err));
@@ -226,7 +226,7 @@
             `<img src="${dataUrl}" style="max-width:100%;border:1px solid #ccc;" />`
           );
           win.document.write(
-            `<p><a href="https://twitter.com/intent/tweet?text=Check%20out%20my%20Crapfixer%20analysis!&hashtags=crapfixer,loganalyzer" target="_blank">➡️ Click here to post on X</a></p>`
+            `<p><a href="https://twitter.com/intent/tweet?text=Check%20out%20my%20CrapFixer%20analysis!&hashtags=CrapFixer,loganalyzer" target="_blank">➡️ Click here to post on X</a></p>`
           );
         });
       }
