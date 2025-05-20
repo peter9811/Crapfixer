@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Crapfixer Update Check</title>
+    <title>CrapFixer Update Check</title>
     <style>
       :root {
         --bg: #f3f6fd;
@@ -162,12 +162,12 @@
       const status = document.getElementById("status");
 
       if (!userVersion) {
-        status.innerText = "❓ No version found. Please open this page from the Crapfixer app.";
+        status.innerText = "❓ No version found. Please open this page from the CrapFixer app.";
       } else {
         const result = compareVersions(userVersion, latestVersion);
 
         if (result < 0) {
-          status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/Crapfixer/releases">⬇️ Download here</a>`;
+          status.innerHTML = `⚠️ Your version (${userVersion}) is outdated.<br><strong>Latest version:</strong> ${latestVersion}<br><a href="https://github.com/builtbybel/CrapFixer/releases">⬇️ Download here</a>`;
         } else if (result === 0) {
           status.innerHTML = `✅ Your version (${userVersion}) is up to date.`;
         } else {
