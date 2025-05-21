@@ -56,6 +56,21 @@ Every coffee‑sized tip not only fuels new features, it also lowers the risk of
 
 [PayPal](https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ) • [Ko‑fi](https://ko-fi.com/builtbybel) ❤️
 
+## Installation
+
+* Download the latest release from my [releases page](https://github.com/builtbybel/CrapFixer/releases)
+* Extract the archive
+
+# Build Instructions
+
+- Install Visual Studio 2022+ with .NET Desktop workload  
+- Clone the repo:  
+  ```bash
+  git clone https://github.com/builtbybel/CFixer.git
+- Open the solution or run:
+  * Debug build: msbuild CFixer.sln /p:Configuration=Debug
+  * Release build: msbuild CFixer.sln /p:Configuration=Release
+- After building, you can find the executable in the bin\Debug or bin\Release folder inside the project directory. Run CFixer.exe to start the app.
 
 ## System Requirements
 
