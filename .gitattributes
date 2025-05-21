@@ -1,6 +1,9 @@
 *.cs linguist-detectable=true
 *.csx linguist-detectable=true
-*.html linguist-language=HTML
-*.js linguist-language=JavaScript
-*.jsx linguist-language=JavaScript
 *.ps1 linguist-detectable=true
+
+/docs/** linguist-vendored=false
+/docs/** linguist-documentation=false
+/docs/**/*.html linguist-language=HTML
+/docs/**/*.js linguist-language=JavaScript
+/docs/**/*.jsx linguist-language=JavaScript
