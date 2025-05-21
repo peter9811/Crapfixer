@@ -45,7 +45,7 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 > ⚠️ **Tip:** For full functionality, run CrapFixer as **Administrator**.  
 > Some fixes (like registry edits under `HKEY_LOCAL_MACHINE`) need elevated permissions.
 
-### ☕ Motivation ≈ Caffeine
+## ☕ Motivation ≈ Caffeine
 
 CrapFixer is my newest — and likely last — fine‑tuning app for Windows.  
 I'm committed to keeping it alive for the long haul, and future development will be powered by **voluntary donations**.
