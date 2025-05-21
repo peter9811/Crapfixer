@@ -32,8 +32,11 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 
 3. **Apply Fixes**  
    Smash the **"Run CFixer!"** button to apply the recommended tweaks.
+   
+> ⚠️ **Tip:** To view what a tweak does you can **Right-Click** on an item and select **Help** or hit **F1**.  
+> The help system also includes an online lookup that will search the tweak online for you.
 
-4. **🔍 Optional: Review the Log**  
+5. **🔍 Optional: Review the Log**  
    Still unsure about the results?  
    → Upload your log to the [Online Log Analyzer](https://builtbybel.github.io/CrapFixer/log-analyzer/index.html)  
    → Get a breakdown of the changes  
