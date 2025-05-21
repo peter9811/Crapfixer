@@ -45,16 +45,24 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 > ⚠️ **Tip:** For full functionality, run CrapFixer as **Administrator**.  
 > Some fixes (like registry edits under `HKEY_LOCAL_MACHINE`) need elevated permissions.
 
-## ☕ Motivation ≈ Caffeine
+## ☕ Motivation ≈ Caffeine
 
-CrapFixer is my newest — and likely last — fine‑tuning app for Windows.  
+**CrapFixer** is my newest — and likely last — fine-tuning app for Windows.  
 I'm committed to keeping it alive for the long haul, and future development will be powered by **voluntary donations**.
 
 ---
 
-Every coffee‑sized tip not only fuels new features, it also lowers the risk of *me* throwing a personal **Blue Screen of Death**.
+> 💡 Every coffee-sized tip not only fuels new features —  
+> it also lowers the risk of *me* throwing a personal **Blue Screen of Death**. 😵‍💫
 
-[PayPal](https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ) • [Ko‑fi](https://ko-fi.com/builtbybel) ❤️
+### 🙏 Support My Work
+
+If you like CrapFixer, consider keeping it caffeinated:
+
+[![Donate via PayPal](https://img.shields.io/badge/Donate-PayPal-0070BA?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?hosted_button_id=M9DW4VNKH9ECQ)  
+[![Support on Ko‑fi](https://img.shields.io/badge/Support-Ko–fi-F16061?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/builtbybel)
+
+**Thank you for keeping the lights on!** ❤️
 
 ## Installation
 
