@@ -7,7 +7,7 @@ async function pasteResult() {
       return;
     }
     document.getElementById("logInput").value = text;
-    analyzeLog(); // direkt analysieren
+    analyzeLog(); // analyze directly!
   } catch (err) {
     alert("No access to clipboard " + err);
   }
