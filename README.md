@@ -61,7 +61,7 @@ Every coffee‑sized tip not only fuels new features, it also lowers the risk of
 * Download the latest release from my [releases page](https://github.com/builtbybel/CrapFixer/releases)
 * Extract the archive
 
-# Build Instructions
+## Build Instructions
 
 - Install Visual Studio 2022+ with .NET Desktop workload  
 - Clone the repo:  
