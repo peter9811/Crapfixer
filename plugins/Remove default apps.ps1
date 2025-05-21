@@ -10,7 +10,8 @@ do {} until (Elevate-Privileges SeTakeOwnershipPrivilege)
 
 Write-Output "Uninstalling default apps"
 $apps = @(
-    # default Windows 10 apps
+    # Group by Microsoft and third-party
+    # Microsoft Apps
     "Microsoft.549981C3F5F10" #Cortana
     "Microsoft.3DBuilder"
     "Microsoft.Appconnector"
@@ -90,7 +91,7 @@ $apps = @(
     "A278AB0D.DisneyMagicKingdoms"
     "A278AB0D.MarchofEmpires"
     "ActiproSoftwareLLC.562882FEEB491" # next one is for the Code Writer from Actipro Software LLC
-    "CAF9E577.Plex"  
+    "CAF9E577.Plex"
     "ClearChannelRadioDigital.iHeartRadio"
     "D52A8D61.FarmVille2CountryEscape"
     "D5EA27B7.Duolingo-LearnLanguagesforFree"
@@ -138,8 +139,8 @@ foreach ($app in $apps) {
 
     Get-AppxPackage -Name $app -AllUsers | Remove-AppxPackage -AllUsers
 
-    ($appxprovisionedpackage).Where( {$_.DisplayName -EQ $app}) |
-        Remove-AppxProvisionedPackage -Online
+    ($appxprovisionedpackage).Where( { $_.DisplayName -EQ $app }) |
+    Remove-AppxProvisionedPackage -Online
 } Write-Host "Clippy has completed the process and removed all possible apps."
 
 # Prevents Apps from re-installing
