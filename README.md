@@ -19,6 +19,15 @@ While cleaning up my GitHub (30+ repos down to 20 now), I also cleaned up thousa
 
 ![Fixing the crap](https://github.com/user-attachments/assets/cb568d53-113e-4a14-8c88-30e822b45bd3)
 
+<details>
+  <summary>💬 A personal note from the developer</summary>
+
+If you're curious about the personal story behind this project and others...
+👉 [Read the full story here](story.md)
+
+</details>
+
+
 ## 🚀 How to Use CrapFixer
 
 1. **Launch the Tool**  
