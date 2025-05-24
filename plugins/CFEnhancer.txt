@@ -43,3 +43,4 @@ ZuneMusic
 ZuneVideo
 DevHome
 Copilot
+Clipchamp
