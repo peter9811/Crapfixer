@@ -81,7 +81,8 @@ If you like CrapFixer, consider keeping it caffeinated:
 
 ## Build Instructions
 
-- Install Visual Studio 2022+ with .NET Desktop workload  
+- Install Visual Studio 2022+ with .NET Desktop workload
+- (Optional but recommended) Windows 8.1+ SDK for WinRT support
 - Clone the repo:  
   ```bash
   git clone https://github.com/builtbybel/CFixer.git
@@ -90,6 +91,16 @@ If you like CrapFixer, consider keeping it caffeinated:
   * Release build: msbuild CFixer.sln /p:Configuration=Release
 - After building, you can find the executable in the bin\Debug or bin\Release folder inside the project directory. Run CFixer.exe to start the app.
 
+> ⚠️ This project uses the Windows.Management.Deployment API, which is part of WinRT. Classic .NET Framework. WinForms projects do not support this out of the box.
+> To build the project successfully, you must manually add a reference to the Windows.winmd metadata file.
+Add Reference to `C:\Program Files (x86)\Windows Kits\8.1\References\CommonConfiguration\Neutral\Annotated\Windows.winmd`
+
+### Build with Visual Studio (GUI)
+- Open CFixer.sln
+- Set the configuration to Release | Any CPU
+- Press `Ctrl + Shift + B` or use Build → Build Solution
+- After building, the executable will be located in: `./bin/Debug/CFixer.exe`
+  
 ## System Requirements
 
 - Windows 11 (Recommended)
