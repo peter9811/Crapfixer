@@ -52,9 +52,9 @@ url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugi
 description=Removes the 'Edit with Clipchamp' option from the context menu for media files.
 url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugins/Remove Edit with Clipchamp (NX).ps1
 
-[Remove Edit in Notepad (NX)]
+[Remove Edit with Notepad (NX)]
 description=Removes the 'Edit in Notepad' option from the context menu for supported file types.
-url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugins/Remove Edit in Notepad (NX).ps1
+url=https://raw.githubusercontent.com/builtbybel/Crapfixer/refs/heads/main/plugins/Remove Edit with Notepad (NX).ps1
 
 [Remove Edit with Photos (NX)]
 description=Removes the 'Edit with Photos' option from the context menu for image files.
