@@ -1,7 +1,7 @@
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">it&#39;s called CrapFixer. let that clean in🧽<a href="https://t.co/UP2iLnAgif">https://t.co/UP2iLnAgif</a><a href="https://twitter.com/hashtag/CrapFixer?src=hash&amp;ref_src=twsrc%5Etfw">#CrapFixer</a> <a href="https://twitter.com/hashtag/Windows?src=hash&amp;ref_src=twsrc%5Etfw">#Windows</a> <a href="https://twitter.com/hashtag/Windows11?src=hash&amp;ref_src=twsrc%5Etfw">#Windows11</a> <a href="https://twitter.com/hashtag/app?src=hash&amp;ref_src=twsrc%5Etfw">#app</a> <a href="https://twitter.com/hashtag/microsoft?src=hash&amp;ref_src=twsrc%5Etfw">#microsoft</a> <a href="https://t.co/OMruEjvuUb">pic.twitter.com/OMruEjvuUb</a></p>&mdash; Belim (@builtbybel) <a href="https://twitter.com/builtbybel/status/1917594071582773272?ref_src=twsrc%5Etfw">April 30, 2025</a></blockquote>
 
 
-# Crap F🧼xer
+# Crap F🧼xer – Fixes the crap Windows leaves behind.
 
 # The tool that says what everyone's thinking
 
