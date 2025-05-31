@@ -7,17 +7,29 @@ using System.Windows.Forms;
 namespace CrapFixer
 {
     /// <summary>
-    /// Provides operations to load, analyze, fix, restore, and show help for FeatureNodes.
+    /// Manages features by loading them into a TreeView, analyzing their status,
+    /// applying fixes or restorations, and providing help information.
+    /// This class operates on <see cref="FeatureNode"/> objects, which represent individual features or categories.
     /// </summary>
     public static class FeatureNodeManager
     {
         private static int totalChecked;
         private static int issuesFound;
 
-        // Public properties to access the analysis results
+        /// <summary>
+        /// Gets the total number of features that were checked during the last analysis.
+        /// </summary>
         public static int TotalChecked => totalChecked;
+
+        /// <summary>
+        /// Gets the number of features that were found to have issues (misconfigurations) during the last analysis.
+        /// </summary>
         public static int IssuesFound => issuesFound;
 
+        /// <summary>
+        /// Resets the counters for total checked features and issues found.
+        /// This should be called before starting a new analysis run.
+        /// </summary>
         public static void ResetAnalysis()
         {
             totalChecked = 0;
@@ -25,8 +37,11 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Loads all features into the TreeView.
+        /// Loads all available features from the <see cref="FeatureLoader"/> into the specified <see cref="TreeView"/>.
+        /// Feature categories are displayed as bold, blue root nodes.
+        /// All nodes are expanded by default after loading.
         /// </summary>
+        /// <param name="tree">The <see cref="TreeView"/> control to populate with feature nodes.</param>
         public static void LoadFeatures(TreeView tree)
         {
             var features = FeatureLoader.Load();
@@ -66,8 +81,12 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Analyzes all checked features recursively and logs only issues.
+        /// Asynchronously analyzes all features that are checked in the TreeView, starting from the provided collection of nodes.
+        /// It recursively checks each node and logs any issues found.
+        /// Updates <see cref="TotalChecked"/> and <see cref="IssuesFound"/> properties.
         /// </summary>
+        /// <param name="nodes">The collection of <see cref="TreeNode"/> objects to start the analysis from (typically the root nodes of the TreeView).</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task AnalyzeAll(TreeNodeCollection nodes)
         {
             ResetAnalysis();
@@ -125,8 +144,11 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Fixes all checked features recursively.
+        /// Asynchronously applies fixes to all features that are checked in the TreeView, starting from the specified node and recursing through its children.
+        /// Logs the outcome of each fix attempt.
         /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> from which to start fixing checked features. This is typically a root node or a specific category node.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation of fixing all checked features under the given node.</returns>
         public static async Task FixChecked(TreeNode node)
         {
             if (node.Tag is FeatureNode fn)
@@ -146,8 +168,11 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Restores all checked features recursively.
+        /// Restores all features that are checked in the TreeView to their original state,
+        /// starting from the specified node and recursing through its children.
+        /// Logs the outcome of each restoration attempt.
         /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> from which to start restoring checked features. This is typically a root node or a specific category node.</param>
         public static void RestoreChecked(TreeNode node)
         {
             if (node.Tag is FeatureNode fn)
@@ -169,8 +194,12 @@ namespace CrapFixer
 
 
         /// <summary>
-        /// Analyzes a selected feature and logs its status.
+        /// Asynchronously analyzes a single selected feature associated with the given <see cref="TreeNode"/>.
+        /// It logs whether the feature is properly configured or requires attention.
+        /// The node's foreground color is updated (Gray for OK, Red for issues).
+        /// Note: This method is `async void` because it's intended as an event handler or a fire-and-forget UI action.
         /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> representing the feature to analyze. The feature must not be a category.</param>
         public static async void AnalyzeFeature(TreeNode node)
         {
             // no && node.Checked 
@@ -191,8 +220,11 @@ namespace CrapFixer
 
 
         /// <summary>
-        /// Attempts to fix the selected feature and logs the result.
+        /// Asynchronously attempts to fix the single feature associated with the given <see cref="TreeNode"/>.
+        /// Logs the outcome of the fix attempt.
         /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> representing the feature to fix. The feature must not be a category.</param>
+        /// <returns>A <see cref="Task"/> representing the asynchronous operation.</returns>
         public static async Task FixFeature(TreeNode node)
         {
             // no && node.Checked 
@@ -207,8 +239,10 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Restores the selected feature to its original state and logs the result.
+        /// Restores the single feature associated with the given <see cref="TreeNode"/> to its original state.
+        /// Logs the outcome of the restoration attempt.
         /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> representing the feature to restore. The feature must not be a category.</param>
         public static void RestoreFeature(TreeNode node)
         {
             // no && node.Checked 
@@ -223,9 +257,11 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Recursively previews changes for all checked features.
+        /// Logs a preview of the changes or details for features, starting from the specified <see cref="TreeNode"/>
+        /// and recursing through its children. This method does not apply any changes.
+        /// It logs the name, category, and details of each feature encountered.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="node">The <see cref="TreeNode"/> from which to start previewing. This is typically a root node or a specific category node.</param>
         public static void PreviewChanges(TreeNode node)
         {
             if (node.Tag is FeatureNode fn)
@@ -247,8 +283,10 @@ namespace CrapFixer
 
 
         /// <summary>
-        /// Displays help information for the selected feature.
+        /// Displays a <see cref="MessageBox"/> with help information for the feature associated with the selected <see cref="TreeNode"/>.
+        /// If no specific information is available or the node is invalid, an appropriate message is shown.
         /// </summary>
+        /// <param name="node">The <see cref="TreeNode"/> representing the feature for which to show help.</param>
         public static void ShowHelp(TreeNode node)
         {
             if (node.Tag is FeatureNode fn && fn.Feature != null)
@@ -267,9 +305,11 @@ namespace CrapFixer
         }
 
         /// <summary>
-        /// Opens the default web browser to search for help online for the selected feature (Extended ShowHelp).
+        /// Opens the default web browser (Microsoft Edge, if available, falling back to system default)
+        /// to search Google for more information about the feature associated with the selected <see cref="TreeNode"/>.
+        /// The search query is based on the feature's details.
         /// </summary>
-        /// <param name="node"></param>
+        /// <param name="node">The <see cref="TreeNode"/> representing the feature for which to search online help.</param>
         public static void ShowHelpOnline(TreeNode node)
         {
             if (node?.Tag is FeatureNode fn)

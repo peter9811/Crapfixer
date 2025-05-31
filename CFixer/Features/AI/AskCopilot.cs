@@ -12,21 +12,42 @@ namespace Settings.AI
         private const string valueName = "{CB3B0003-8088-4EDE-8769-8B354AB2FF8C}";
         private const string displayValue = "Ask Copilot";
 
+        /// <summary>
+        /// Provides detailed information about the registry key and value used to block the "Ask Copilot" context menu entry.
+        /// </summary>
+        /// <returns>A string detailing the registry path, value name, and its purpose.</returns>
         public override string GetFeatureDetails()
         {
             return $"{fullKeyPath} | Value: {valueName} = \"{displayValue}\" | Blocks Copilot context menu entry.";
         }
 
+        /// <summary>
+        /// Gets the unique identifier for the feature that removes the "Ask Copilot" context menu entry.
+        /// </summary>
+        /// <returns>A string representing the unique ID: "Remove Ask Copilot from context menu".</returns>
         public override string ID()
         {
             return "Remove Ask Copilot from context menu";
         }
 
+        /// <summary>
+        /// Provides a brief description of the feature's purpose.
+        /// </summary>
+        /// <returns>A string explaining that this feature blocks the "Ask Copilot" entry in the Windows 11 context menu.</returns>
         public override string Info()
         {
             return "Blocks the 'Ask Copilot' entry in the Windows 11 context menu by disabling its Shell Extension.";
         }
 
+        /// <summary>
+        /// Asynchronously checks if the "Ask Copilot" context menu entry is currently blocked.
+        /// It verifies the presence and value of a specific registry entry.
+        /// </summary>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result is <c>true</c> if the context menu entry is blocked (registry value exists and is correct),
+        /// <c>false</c> otherwise.
+        /// </returns>
         public override Task<bool> CheckFeature()
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey(keyPath))
@@ -37,6 +58,13 @@ namespace Settings.AI
             }
         }
 
+        /// <summary>
+        /// Asynchronously blocks the "Ask Copilot" context menu entry by creating a specific registry value.
+        /// </summary>
+        /// <returns>
+        /// A task that represents the asynchronous operation.
+        /// The task result is <c>true</c> if the registry value was successfully set, <c>false</c> if an error occurred.
+        /// </returns>
         public override Task<bool> DoFeature()
         {
             try
@@ -56,6 +84,10 @@ namespace Settings.AI
             }
         }
 
+        /// <summary>
+        /// Restores the "Ask Copilot" context menu entry by deleting the specific registry value that blocks it.
+        /// </summary>
+        /// <returns><c>true</c> if the registry value was successfully deleted or did not exist, <c>false</c> if an error occurred.</returns>
         public override bool UndoFeature()
         {
             try
