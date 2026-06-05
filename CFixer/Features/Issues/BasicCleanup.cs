@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,38 +13,17 @@ namespace Settings.Issues
         private const int cleanupSetNumber = 1;
 
         public override string ID() => "Basic Disk Cleanup";
-
-        public override string Info() => "Deletes all temporary files from the user's Temp folder. Then, the built-in Disk Cleanup utility (cleanmgr) is run.";
+        public override string Info() => "Deletes temporary files and runs the Windows Disk Cleanup utility.";
+        public override string GetFeatureDetails()
+        {
+            try { return $"Temp folder: {tempPath} | Size: {GetDirectorySize(tempPath)} MB"; }
+            catch { return "Temp folder not accessible"; }
+        }
 
         public override Task<bool> CheckFeature()
         {
-            try
-            {
-                var totalSize = GetDirectorySize(tempPath);
-
-                bool isOk = totalSize <= 50;
-
-                return Task.FromResult(isOk);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error checking Temp folder: {ex.Message}", LogLevel.Error);
-                return Task.FromResult(false);
-            }
-        }
-
-        public override string GetFeatureDetails()
-        {
-            try
-            {
-                var totalSize = GetDirectorySize(tempPath);
-                return $"Temp folder size: {totalSize} MB (including cleanmgr /sagerun:1 in the next run)";
-            }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error accessing Temp folder: {ex.Message}", LogLevel.Error);
-                return $"Temp folder not accessible: {tempPath}";
-            }
+            try { return Task.FromResult(GetDirectorySize(tempPath) <= 50); }
+            catch { return Task.FromResult(false); }
         }
 
         public override async Task<bool> DoFeature()
@@ -58,103 +37,57 @@ namespace Settings.Issues
             }
             catch (Exception ex)
             {
-                Logger.Log($"Error cleaning Temp folder: {ex.Message}", LogLevel.Warning);
+                Logger.Log($"Cleanup error: {ex.Message}", LogLevel.Warning);
                 return false;
             }
         }
 
+        public override Task<bool> UndoFeature()
+        {
+            Logger.Log("Cleanup cannot be undone.", LogLevel.Warning);
+            return Task.FromResult(false);
+        }
+
         private async Task CleanTempFolderAsync()
         {
+            if (!Directory.Exists(tempPath)) return;
+
             var files = await Task.Run(() => Directory.GetFiles(tempPath, "*", SearchOption.AllDirectories));
             var dirs = await Task.Run(() => Directory.GetDirectories(tempPath, "*", SearchOption.AllDirectories));
 
             foreach (var file in files)
             {
-                try
-                {
-                    await Task.Run(() => File.Delete(file));
-                    Logger.Log($"Deleted file: {file}", LogLevel.Info);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"Error deleting file {file}: {ex.Message}", LogLevel.Warning);
-                }
+                try { await Task.Run(() => File.Delete(file)); } catch { }
             }
 
             foreach (var dir in dirs)
             {
-                try
-                {
-                    await Task.Run(() => Directory.Delete(dir, true));
-                    Logger.Log($"Deleted directory: {dir}", LogLevel.Info);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"Error deleting directory {dir}: {ex.Message}", LogLevel.Warning);
-                }
+                try { await Task.Run(() => Directory.Delete(dir, true)); } catch { }
             }
         }
 
-        // calculate the size of the directory in MB
         private long GetDirectorySize(string directory)
         {
             try
             {
+                if (!Directory.Exists(directory)) return 0;
                 var directoryInfo = new DirectoryInfo(directory);
-                long size = 0;
-
-                // Calculate size of all files
-                size += directoryInfo.GetFiles("*", SearchOption.AllDirectories).Sum(file => file.Length);
-
-                return size / (1024 * 1024);                 // return size in MB
+                return directoryInfo.GetFiles("*", SearchOption.AllDirectories).Sum(file => file.Length) / (1024 * 1024);
             }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error calculating directory size: {ex.Message}", LogLevel.Warning);
-                return 0;
-            }
+            catch { return 0; }
         }
 
         private async Task RunDiskCleanup()
         {
             try
             {
-                Logger.Log("Running Disk Cleanup utility (cleanmgr)...", LogLevel.Info);
+                var startInfo1 = new ProcessStartInfo("cmd", $"/c cleanmgr.exe /sageset:{cleanupSetNumber}") { CreateNoWindow = true, UseShellExecute = false };
+                var startInfo2 = new ProcessStartInfo("cmd", $"/c cleanmgr.exe /sagerun:{cleanupSetNumber} /verylowdisk") { CreateNoWindow = true, UseShellExecute = false };
 
-                var sageSetCmd = $"cleanmgr.exe /sageset:{cleanupSetNumber}";
-                var startInfo1 = new ProcessStartInfo("cmd", $"/c {sageSetCmd}")
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                };
-
-                var sageRunCmd = $"cleanmgr.exe /sagerun:{cleanupSetNumber}";
-                var veryLowDiskCmd = $"cleanmgr.exe /verylowdisk";
-                var startInfo2 = new ProcessStartInfo("cmd", $"/c {sageRunCmd} {veryLowDiskCmd}")
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                };
-
-                using (var process1 = Process.Start(startInfo1))
-                {
-                    if (process1 != null)
-                        await Task.Run(() => process1.WaitForExit());
-                }
-
-                using (var process2 = Process.Start(startInfo2))
-                {
-                    if (process2 != null)
-                        await Task.Run(() => process2.WaitForExit());
-                }
+                using (var p1 = Process.Start(startInfo1)) { if (p1 != null) await Task.Run(() => p1.WaitForExit()); }
+                using (var p2 = Process.Start(startInfo2)) { if (p2 != null) await Task.Run(() => p2.WaitForExit()); }
             }
-            catch (Exception ex)
-            {
-                Logger.Log($"Error running Disk Cleanup: {ex.Message}", LogLevel.Warning);
-            }
+            catch { }
         }
-
-        // Undo method: Cleanup cannot be undone, so return false
-        public override bool UndoFeature() => false;
     }
 }

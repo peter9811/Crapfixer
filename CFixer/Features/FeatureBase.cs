@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace CrapFixer
 {
@@ -7,9 +7,8 @@ namespace CrapFixer
         public abstract string ID();
         public abstract string Info();
         public abstract string GetFeatureDetails();
-        public abstract Task<bool> CheckFeature();  // async
-        public abstract Task<bool> DoFeature();    // async
-        public abstract bool UndoFeature();
+        public abstract Task<bool> CheckFeature();
+        public abstract Task<bool> DoFeature();
+        public abstract Task<bool> UndoFeature();
     }
-
 }

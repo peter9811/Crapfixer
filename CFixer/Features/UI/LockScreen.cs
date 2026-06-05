@@ -1,66 +1,20 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
-namespace Settings.Personalization
+namespace Settings.UI
 {
     internal class LockScreen : FeatureBase
     {
         private const string keyName = @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\Personalization";
         private const string valueName = "NoLockScreen";
-        private const int recommendedValue = 0;
+        private const int recommendedValue = 1;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID()
-        {
-            return "Don't use personalized lock screen";
-        }
-
-        public override string Info()
-        {
-            return "This feature will disable the personalized lock screen.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            bool result = !Utils.IntEquals(keyName, valueName, recommendedValue);
-            return Task.FromResult(result);
-        }
-
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue}";
+        public override string ID() => "Disable Lock Screen";
+        public override string Info() => "Disables the lock screen and takes you directly to the login screen.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Lock screen disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 0, RegistryValueKind.DWord, "Lock screen enabled");
     }
 }

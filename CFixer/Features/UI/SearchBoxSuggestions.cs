@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -11,52 +10,11 @@ namespace Settings.UI
         private const string valueName = "DisableSearchBoxSuggestions";
         private const int recommendedValue = 1;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID()
-        {
-            return "Disable Search Box Suggestions";
-        }
-
-        public override string Info()
-        {
-            return "This feature disables Bing search and web suggestions in the Windows Start Menu.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error in DisableSearchBoxSuggestions: " + ex.Message, LogLevel.Error);
-                return Task.FromResult(false);
-            }
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord); // 0 = Enable suggestions
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error undoing DisableSearchBoxSuggestions: " + ex.Message, LogLevel.Error);
-                return false;
-            }
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue}";
+        public override string ID() => "Disable Search Box Suggestions";
+        public override string Info() => "Disables web search suggestions in the taskbar search box.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Search box suggestions disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 0, RegistryValueKind.DWord, "Search box suggestions enabled");
     }
 }

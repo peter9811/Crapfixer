@@ -1,9 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
-namespace Settings.Personalization
+namespace Settings.UI
 {
     internal class StartLayout : FeatureBase
     {
@@ -11,56 +10,11 @@ namespace Settings.Personalization
         private const string valueName = "Start_Layout";
         private const int recommendedValue = 1;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID()
-        {
-            return "Pin more Apps on start menu";
-        }
-
-        public override string Info()
-        {
-            return "This feature will allow pinning more Apps on start menu";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(
-                   Utils.IntEquals(keyName, valueName, recommendedValue)
-             );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue} (More pins)";
+        public override string ID() => "Show More Pins in Start";
+        public override string Info() => "Changes the Start menu layout to show more pinned apps and fewer recommendations.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Start layout changed to more pins");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 0, RegistryValueKind.DWord, "Start layout restored to default");
     }
 }

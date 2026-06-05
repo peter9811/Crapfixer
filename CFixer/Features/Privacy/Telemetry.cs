@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -11,54 +10,23 @@ namespace Settings.Privacy
         private const string diagTrack = @"HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\DiagTrack";
 
         public override string ID() => "Turn off Telemetry data collection";
+        public override string Info() => "Turns off telemetry data collection and prevents sending it to Microsoft.";
+        public override string GetFeatureDetails() => $"{dataCollection} | {diagTrack}";
 
-        public override string Info() => "This feature will turn off telemetry data collection and prevent the data from being sent to Microsoft.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(dataCollection, "AllowTelemetry", 0) && Utils.IntEquals(diagTrack, "Start", 4));
 
-        public override string GetFeatureDetails()
+        public override async Task<bool> DoFeature()
         {
-            return $"{dataCollection} | {diagTrack}";
+            bool r1 = await RegistryHelper.SetValue(dataCollection, "AllowTelemetry", 0, RegistryValueKind.DWord);
+            bool r2 = await RegistryHelper.SetValue(diagTrack, "Start", 4, RegistryValueKind.DWord);
+            return r1 && r2;
         }
 
-        public override Task<bool> CheckFeature()
+        public override async Task<bool> UndoFeature()
         {
-            return Task.FromResult(
-               Utils.IntEquals(dataCollection, "AllowTelemetry", 0) &&
-                Utils.IntEquals(diagTrack, "Start", 4)
-
-           );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(dataCollection, "AllowTelemetry", 0, RegistryValueKind.DWord);
-                Registry.SetValue(diagTrack, "Start", 4, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(dataCollection, "AllowTelemetry", 1, RegistryValueKind.DWord);
-                Registry.SetValue(diagTrack, "Start", 2, RegistryValueKind.DWord);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
+            bool r1 = await RegistryHelper.SetValue(dataCollection, "AllowTelemetry", 1, RegistryValueKind.DWord);
+            bool r2 = await RegistryHelper.SetValue(diagTrack, "Start", 2, RegistryValueKind.DWord);
+            return r1 && r2;
         }
     }
 }

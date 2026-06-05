@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -9,58 +8,13 @@ namespace Settings.System
     {
         private const string keyName = @"HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control";
         private const string valueName = "WaitToKillServiceTimeout";
-        private const string recommendedValue = "1000"; // Set to 1000 ms (1 second)
+        private const string recommendedValue = "1000";
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue} ms";
-        }
-
-        public override string ID()
-        {
-            return "Speed Up Shutdown Time";
-        }
-
-        public override string Info()
-        {
-            return "This feature reduces the WaitToKillServiceTimeout value, which speeds up the shutdown process by reducing the time Windows waits for services to stop.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(
-                   Utils.StringEquals(keyName, valueName, recommendedValue)
-             );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.String);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error in SpeedUpShutdown: " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, "5000", RegistryValueKind.String); // Default value
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error in SpeedUpShutdown (Undo): " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue} ms";
+        public override string ID() => "Speed Up Shutdown Time";
+        public override string Info() => "Reduces the time Windows waits for services to stop during shutdown.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.StringEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.String, "Shutdown time speeded up");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, "5000", RegistryValueKind.String, "Shutdown time restored to default");
     }
 }

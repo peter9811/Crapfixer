@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -7,59 +6,25 @@ namespace Settings.Ads
 {
     internal class LockScreenAds : FeatureBase
     {
-        private const string keyName = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager";
-        private const string valueName = "RotatingLockScreenOverlayEnabled";
-        private const string valueName2 = "SubscribedContent-338387Enabled";
-        private const int recommendedValue = 0;
+        private const string keyName = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager";
 
-        public override string ID() => "Disable Lock Screen Tips and Ads";
+        public override string GetFeatureDetails() => $"{keyName} | SubscribedContent-338387Enabled";
+        public override string ID() => "Disable Lock Screen Ads";
+        public override string Info() => "Disables ads and suggestions on the lock screen.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, "SubscribedContent-338387Enabled", 0));
 
-        public override string Info() => "This feature will disable tips and ads on the lock screen.";
-
-        public override string GetFeatureDetails()
+        public override async Task<bool> DoFeature()
         {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-338387Enabled", 0, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(keyName, "RotatingLockScreenEnabled", 0, RegistryValueKind.DWord);
+            return true;
         }
 
-        public override Task<bool> CheckFeature()
+        public override async Task<bool> UndoFeature()
         {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue) &&
-                   Utils.IntEquals(keyName, valueName2, recommendedValue)
-            );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName2, 0, Microsoft.Win32.RegistryValueKind.DWord);
-
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-                
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, Microsoft.Win32.RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName2, 1, Microsoft.Win32.RegistryValueKind.DWord);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-338387Enabled", 1, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(keyName, "RotatingLockScreenEnabled", 1, RegistryValueKind.DWord);
+            return true;
         }
     }
 }

@@ -1,7 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Threading.Tasks;
+using Microsoft.Win32;
 using CrapFixer;
+using System.Threading.Tasks;
 
 namespace Settings.UI
 {
@@ -11,52 +10,11 @@ namespace Settings.UI
         private const string valueName = "BingSearchEnabled";
         private const int recommendedValue = 0;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID()
-        {
-            return "Disable Bing Search";
-        }
-
-        public override string Info()
-        {
-            return "This feature disables Bing integration in Windows Search.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error in DisableBingSearch: " + ex.Message, LogLevel.Error);
-                return Task.FromResult(false);
-            }
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error undoing DisableBingSearch: " + ex.Message, LogLevel.Error);
-                return false;
-            }
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue}";
+        public override string ID() => "Disable Bing Search";
+        public override string Info() => "This feature disables Bing integration in Windows Search.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Bing Search disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 1, RegistryValueKind.DWord, "Bing Search enabled");
     }
 }

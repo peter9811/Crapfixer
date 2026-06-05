@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -7,71 +6,25 @@ namespace Settings.Gaming
 {
     internal class GameDVR : FeatureBase
     {
-        private const string keyName = @"HKEY_CURRENT_USER\System\GameConfigStore";
+        private const string keyName = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\GameDVR";
 
-        // 0 = Enabled, 2 = Disabled
-        private const string keyName2 = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR";
+        public override string GetFeatureDetails() => $"{keyName} | AppCaptureEnabled";
+        public override string ID() => "Disable Game DVR";
+        public override string Info() => "Disables Game DVR background recording for better performance.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, "AppCaptureEnabled", 0));
 
-        private const string valueName = "GameDVR_Enabled";
-        private const string valueName2 = "GameDVR_FSEBehaviorMode";
-        private const string valueName3 = "value";
-
-        public override string GetFeatureDetails()
+        public override async Task<bool> DoFeature()
         {
-            return $"{keyName} |Value: {valueName} | {valueName2} | {keyName2} | {valueName3} ";
+            await RegistryHelper.SetValue(keyName, "AppCaptureEnabled", 0, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 0, RegistryValueKind.DWord);
+            return true;
         }
 
-        public override string ID()
+        public override async Task<bool> UndoFeature()
         {
-            return "Disable Game DVR";
-        }
-
-        public override string Info()
-        {
-            return "This feature will disable Game DVR.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, 0) &&
-                       Utils.IntEquals(keyName, valueName2, 2) &&
-                       Utils.IntEquals(keyName2, valueName3, 0));
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName2, 2, RegistryValueKind.DWord);
-                Registry.SetValue(keyName2, valueName3, 0, RegistryValueKind.DWord);
-
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName2, 0, RegistryValueKind.DWord);
-                Registry.SetValue(keyName2, valueName3, 1, RegistryValueKind.DWord);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
+            await RegistryHelper.SetValue(keyName, "AppCaptureEnabled", 1, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(@"HKEY_CURRENT_USER\System\GameConfigStore", "GameDVR_Enabled", 1, RegistryValueKind.DWord);
+            return true;
         }
     }
 }

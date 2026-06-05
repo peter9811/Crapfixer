@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -7,64 +6,27 @@ namespace Settings.Ads
 {
     internal class SettingsAds : FeatureBase
     {
-        private const string keyName = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager";
-        private const string valueName = "SubscribedContent-338393Enabled";
-        private const string valueName2 = "SubscribedContent-353694Enabled";
-        private const string valueName3 = "SubscribedContent-353696Enabled";
+        private const string keyName = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager";
 
-        private const int recommendedValue = 0;
+        public override string GetFeatureDetails() => $"{keyName} | SubscribedContent-338393Enabled, etc.";
+        public override string ID() => "Disable Ads in Settings";
+        public override string Info() => "Disables suggested content (ads) in the Settings app.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, "SubscribedContent-338393Enabled", 0));
 
-        public override string ID() => "Disable Settings Ads";
-
-        public override string Info() => "This feature will disable ads in settings.";
-
-        public override string GetFeatureDetails()
+        public override async Task<bool> DoFeature()
         {
-            return $"{keyName} | Value: {valueName} + {valueName2} + {valueName3} | Recommended Value: {recommendedValue}";
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-338393Enabled", 0, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-353694Enabled", 0, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-353696Enabled", 0, RegistryValueKind.DWord);
+            return true;
         }
 
-        public override Task<bool> CheckFeature()
+        public override async Task<bool> UndoFeature()
         {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue) &&
-                   Utils.IntEquals(keyName, valueName2, recommendedValue) &&
-                   Utils.IntEquals(keyName, valueName3, recommendedValue)
-            );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName2, 0, Microsoft.Win32.RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName3, 0, Microsoft.Win32.RegistryValueKind.DWord);
-
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, Microsoft.Win32.RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName2, 1, Microsoft.Win32.RegistryValueKind.DWord);
-                Registry.SetValue(keyName, valueName3, 1, Microsoft.Win32.RegistryValueKind.DWord);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-338393Enabled", 1, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-353694Enabled", 1, RegistryValueKind.DWord);
+            await RegistryHelper.SetValue(keyName, "SubscribedContent-353696Enabled", 1, RegistryValueKind.DWord);
+            return true;
         }
     }
 }

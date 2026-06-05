@@ -39,7 +39,7 @@ namespace Settings.System
             catch (Exception ex)
             {
                 Logger.Log("Winget check failed: " + ex.Message, LogLevel.Error);
-                return false;
+                return Task.FromResult(false);
             }
         }
 
@@ -50,20 +50,20 @@ namespace Settings.System
                 try
                 {
                     LaunchInTerminal("winget upgrade --all --include-unknown");
-                    return true;
+                    return Task.FromResult(true);
                 }
                 catch (Exception ex)
                 {
                     Logger.Log("Failed to run winget upgrade: " + ex.Message, LogLevel.Error);
-                    return false;
+                    return Task.FromResult(false);
                 }
             });
         }
 
-        public override bool UndoFeature()
+        public override Task<bool> UndoFeature()
         {
             Logger.Log("Winget upgrades cannot be undone.", LogLevel.Warning);
-            return false;
+            return Task.FromResult(false);
         }
 
         private void LaunchInTerminal(string command)

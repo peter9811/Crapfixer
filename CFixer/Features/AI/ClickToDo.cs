@@ -1,70 +1,20 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Threading.Tasks;
+using Microsoft.Win32;
 using CrapFixer;
+using System.Threading.Tasks;
 
-namespace Settings.UI
+namespace Settings.AI
 {
-    /// <summary>
-    /// Disables the Click to Do feature, which also removes its entry from the right-click context menu.
-    /// Only available on Copilot+ PCs running Windows 11 24H2 or newer.
-    /// Requires a PC with an NPU (Neural Processing Unit).
-    /// </summary>
-    internal class ClickToDo: FeatureBase
+    internal class ClickToDo : FeatureBase
     {
-        private const string keyName = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\Shell\ClickToDo";
-        private const string valueName = "DisableClickToDo";
-        private const int recommendedValue = 1; // 1 = fully disabled, including context menu
+        private const string keyName = @"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced";
+        private const string valueName = "EnableClickToDo";
+        private const int recommendedValue = 0;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Set to: {recommendedValue} (disables Click to Do, removing it from context menus). " +
-                   "Note: This setting only applies on Copilot+ PCs with Windows 11 24H2 or newer.";
-        }
-
-
-
-        public override string ID()
-        {
-            return "Disable Click to Do (Only Copilot+ PCs)";
-        }
-
-        public override string Info()
-        {
-            return "Disables Click to Do entirely, including its context menu entry which uses on-device AI to suggest actions based on screen content. Only available on Copilot+ PCs with Windows 11 24H2 or newer.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error disabling Click to Do: " + ex.Message, LogLevel.Error);
-                return Task.FromResult(false);
-            }
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error re-enabling Click to Do: " + ex.Message, LogLevel.Error);
-                return false;
-            }
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue}";
+        public override string ID() => "Disable Click to Do";
+        public override string Info() => "Disables the 'Click to Do' AI feature in Windows 11.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Click to Do disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 1, RegistryValueKind.DWord, "Click to Do enabled");
     }
 }

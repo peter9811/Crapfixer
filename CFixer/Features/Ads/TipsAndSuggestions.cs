@@ -26,29 +26,29 @@ namespace Settings.Ads
                  );
         }
 
-        public override Task<bool> DoFeature()
+        public override async Task<bool> DoFeature()
         {
             try
             {
-                Registry.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
+                await RegistryHelper.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
 
-                return Task.FromResult(true);
+                return await RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord);
             }
             catch (Exception ex)
             {
                 Logger.Log("Code red in " + ex.Message, LogLevel.Error);
             }
 
-            return Task.FromResult(false);
+            return false;
         }
 
-        public override bool UndoFeature()
+        public override async Task<bool> UndoFeature()
         {
             try
             {
-                Registry.SetValue(keyName, valueName, 1, Microsoft.Win32.RegistryValueKind.DWord);
+                await RegistryHelper.SetValue(keyName, valueName, 1, Microsoft.Win32.RegistryValueKind.DWord);
 
-                return true;
+                return await RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord);
             }
             catch (Exception ex)
             {
