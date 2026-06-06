@@ -1,9 +1,8 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
-namespace Settings.Personalization
+namespace Settings.UI
 {
     internal class SearchboxTaskbarMode : FeatureBase
     {
@@ -11,56 +10,11 @@ namespace Settings.Personalization
         private const string valueName = "SearchboxTaskbarMode";
         private const int recommendedValue = 0;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID()
-        {
-            return "Hide search box on taskbar";
-        }
-
-        public override string Info()
-        {
-            return "This feature will hide search box on taskbar";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(
-                   Utils.IntEquals(keyName, valueName, recommendedValue)
-             );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 2, RegistryValueKind.DWord);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue} (Hidden)";
+        public override string ID() => "Hide Search Box on Taskbar";
+        public override string Info() => "Hides the search box from the taskbar to save space.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Search box hidden");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 2, RegistryValueKind.DWord, "Search box shown (default)");
     }
 }

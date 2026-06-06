@@ -1,132 +1,95 @@
-﻿using CFixer;
-using CFixer.Properties;
-using CFixer.Views;
+using Features;
 using System;
+using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Views;
 
 namespace CrapFixer
 {
     public partial class MainForm : Form
     {
+        private AppManagerService _appManager = new AppManagerService();
         private NavigationManager _navigationManager;
-        private NavigationHandler _navigationHandler;
-        private LogActions _logActions;
-        private LogActionsController _logActionsController;
-        private readonly AppManagerService _appManager = new AppManagerService();
 
         public MainForm()
         {
             InitializeComponent();
-            IniStateManager.ApplyWindowState(this);
-
-            // Set up the main navigation manager and logger
             _navigationManager = new NavigationManager(panelContainer);
+        }
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            FeatureNodeManager.Initialize(treeFeatures);
             Logger.OutputBox = rtbLogger;
 
-            // Set up log actions controller
-            _logActions = new LogActions(rtbLogger);
-        }
-
-        private async void MainForm_Shown(object sender, EventArgs e)
-        {
-            await InitializeUI(); // _ = InitializeUI();
-            InitializeAppState();
-        }
-
-        private void InitializeAppState()
-        {
-            // Load features and plugins into the tree view
-            FeatureNodeManager.LoadFeatures(treeFeatures);
-            PluginManager.LoadPlugins(treeFeatures);
-
-            // Load settings from INI file if enabled
-            IniStateManager.LoadFeaturesIfEnabled(treeFeatures);
-        }
-
-        private async Task InitializeUI()
-        {
-            // Initialize the navigation handler with buttons
-            _navigationHandler = new NavigationHandler(btnFixer, btnRestore, btnTools, btnGitHub);
-
-            // Load navigation icons
-            await _navigationHandler.LoadNavigationIcons();
-
-            // Register navigation handler
-            _navigationHandler.NavigationButtonClicked += NavigationHandler_NavigationButtonClicked;
-
-            // Register click handlers for GitHub links
-            pictureHeader.Click += PictureHeader_Click;
-            lblHeader.Click += PictureHeader_Click;
-
-            // Re-initialize log actions controller (optional if not changed)
-            _logActionsController = new LogActionsController(comboLogActions, _logActions);
-
-            // Set version and OS info
-            lblVersionInfo.Text = $"v{Program.GetAppVersion()} ";
-            lblOSInfo.Text = await OSHelper.OSHelper.GetWindowsVersion();
-        }
-
-        // Handles navigation button clicks and switches views accordingly
-        private void NavigationHandler_NavigationButtonClicked(Button button)
-        {
-            if (button == btnFixer)
+            if (IniStateManager.IsViewSettingEnabled("SETTINGS", "checkSaveToINI"))
             {
-                _navigationManager.GoToMain();
+                IniStateManager.Load(treeFeatures, this);
             }
-            else if (button == btnTools)
+
+            lblVersionInfo.Text = "Version " + Program.GetAppVersion();
+            statusLabel.Text = "Detecting OS...";
+            string os = await OSHelper.GetWindowsVersion();
+            statusLabel.Text = os;
+
+            CheckAdminPrivileges();
+        }
+
+        private void CheckAdminPrivileges()
+        {
+            if (!OSHelper.IsAdministrator())
             {
-                _navigationManager.SwitchView(new OptionsView());
+                Logger.Log("⚠️ Running without Administrator privileges. Some fixes may fail.", LogLevel.Warning);
+                var result = MessageBox.Show("CrapFixer works best with Administrator privileges.\nWould you like to restart as Administrator?", "Administrator Rights", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    OSHelper.RestartAsAdmin();
+                }
             }
         }
 
         private async void btnAnalyze_Click(object sender, EventArgs e)
         {
-            // Analyze features
-            await FeatureNodeManager.AnalyzeAll(treeFeatures.Nodes);
+            rtbLogger.Clear();
+            btnAnalyze.Enabled = false;
+            progressBar.Visible = true;
+            progressBar.Value = 0;
+            statusLabel.Text = "Analyzing features...";
 
-            // Analyze plugins
+            var progress = new Progress<int>(v => progressBar.Value = v);
+
+            await FeatureNodeManager.AnalyzeAll(treeFeatures.Nodes, progress);
+
+            statusLabel.Text = "Analyzing plugins...";
             await PluginManager.AnalyzeAllPlugins(treeFeatures.Nodes);
 
-            // Analyze apps
+            statusLabel.Text = "Analyzing apps...";
             await AnalyzeApps();
 
-            // Show log actions combo box
-            comboLogActions.Visible = true;
+            progressBar.Visible = false;
+            btnAnalyze.Enabled = true;
+            statusLabel.Text = "Analysis complete.";
         }
 
-        /// <summary>
-        /// Analyzes the apps and logs the results.
-        /// </summary>
         private async Task AnalyzeApps()
         {
             checkedListBoxApps.Items.Clear();
-
-            // Try loading patterns from CFEnhancer.txt (located in Plugins folder)
             var (bloatwarePatterns, whitelistPatterns, scanAll) = _appManager.LoadExternalBloatwarePatterns();
 
-            if (bloatwarePatterns.Length == 0 && !scanAll)
+            if (bloatwarePatterns.Length == 0)
             {
-                // Fallback to internal resource if external file not found or empty and scanAll is not enabled
-                bloatwarePatterns = Resources.PredefinedApps?
-                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim().ToLower()).ToArray() ?? Array.Empty<string>();
-
-                whitelistPatterns = Array.Empty<string>();
-                Logger.Log("Using built-in bloatware list.", LogLevel.Info);
-            }
-            else
-            {
-                Logger.Log("🔎 Plugin ready: CFEnhancer (external bloatware list)", LogLevel.Info);
+                string predefinedApps = "Microsoft.BingNews,Microsoft.GetHelp,Microsoft.Getstarted,Microsoft.Messaging,Microsoft.MicrosoftOfficeHub,Microsoft.MicrosoftSolitaireCollection,Microsoft.People,Microsoft.SkypeApp,Microsoft.WindowsFeedbackHub,Microsoft.YourPhone,Microsoft.ZuneVideo,Microsoft.ZuneMusic,Microsoft.WindowsMaps,Microsoft.Office.OneNote,Microsoft.XboxApp,Microsoft.XboxGamingOverlay,Microsoft.XboxIdentityProvider,Microsoft.XboxSpeechToTextOverlay,Microsoft.GamingApp";
+                bloatwarePatterns = predefinedApps.Split(',').Select(s => s.Trim().ToLower()).ToArray();
             }
 
-            // Analyze installed apps based on patterns and whitelist, and optionally scan all
             var apps = await _appManager.AnalyzeAndLogAppsAsync(bloatwarePatterns, whitelistPatterns, scanAll);
-
             foreach (var app in apps)
             {
                 checkedListBoxApps.Items.Add(app.FullName);
@@ -136,109 +99,96 @@ namespace CrapFixer
         private async void btnFix_Click(object sender, EventArgs e)
         {
             rtbLogger.Clear();
+            btnFix.Enabled = false;
 
-            // Fix all features
+            if (MessageBox.Show("Would you like to create a System Restore Point before proceeding?", "Safety First", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                statusLabel.Text = "Creating Restore Point...";
+                await OSHelper.CreateRestorePoint("CrapFixer Optimization");
+            }
+
+            int total = FeatureNodeManager.CountCheckedNodes(treeFeatures.Nodes);
+            progressBar.Visible = true;
+            progressBar.Value = 0;
+            statusLabel.Text = "Applying fixes...";
+            var progress = new Progress<int>(v => progressBar.Value = v);
+
+            var counter = new FeatureNodeManager.Counter();
             foreach (TreeNode node in treeFeatures.Nodes)
-                await FeatureNodeManager.FixChecked(node);
+                await FeatureNodeManager.FixChecked(node, progress, total, counter);
 
-            // Fix all plugins
+            statusLabel.Text = "Running plugins...";
             foreach (TreeNode node in treeFeatures.Nodes)
                 await PluginManager.FixChecked(node);
 
-            // Fix selected Store apps
             var selectedApps = checkedListBoxApps.CheckedItems.Cast<string>().ToList();
-            if (selectedApps.Count == 0)
-                return;
-
-            var appService = new AppManagerService();
-            var removedApps = await appService.UninstallSelectedAppsAsync(selectedApps);
-
-            // Update UI after uninstall
-            foreach (var app in removedApps)
+            if (selectedApps.Count > 0)
             {
-                checkedListBoxApps.Items.Remove(app);
+                statusLabel.Text = "Uninstalling apps...";
+                var removedApps = await _appManager.UninstallSelectedAppsAsync(selectedApps);
+                foreach (var app in removedApps)
+                {
+                    checkedListBoxApps.Items.Remove(app);
+                }
             }
+
+            progressBar.Visible = false;
+            btnFix.Enabled = true;
+            statusLabel.Text = "Fixes applied.";
         }
 
-        private void btnRestore_Click(object sender, EventArgs e)
+        private async void btnRestore_Click(object sender, EventArgs e)
         {
             var result = MessageBox.Show(
-           "⚠️ This will restore all selected features to their original state.\n" +
-           "Changes made by previous configurations may be reverted.\n\n" +
-           "Are you sure you want to proceed?",
-           "Restore Selected Features",
-           MessageBoxButtons.YesNo,
-           MessageBoxIcon.Warning);
+                "⚠️ This will restore all selected features to their original state.\n" +
+                "Are you sure you want to proceed?",
+                "Restore Selected Features",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
 
             if (result == DialogResult.Yes)
             {
                 rtbLogger.Clear();
+                statusLabel.Text = "Restoring features...";
                 foreach (TreeNode node in treeFeatures.Nodes)
-                    FeatureNodeManager.RestoreChecked(node);
+                    await FeatureNodeManager.RestoreChecked(node);
 
                 Logger.Log("↩️ All selected features have been restored.", LogLevel.Info);
+                statusLabel.Text = "Restore complete.";
             }
         }
 
-        /// <summary>
-        /// Analyzes all plugins and features starting from the selected node from the context menu.
-        /// </summary>
         private async void analyzeMarkedFeatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeFeatures.SelectedNode is TreeNode selectedNode)
             {
-                Logger.Log($"🔎 Analyzing Feature: {selectedNode.Text}", LogLevel.Info);
-
-                // If a single node is selected (leaf node with no children),
-                // always analyze this node regardless of its Checked state.
-                if (selectedNode.Nodes.Count == 0)
-                {
-                    await PluginManager.AnalyzePlugin(selectedNode);
-                }
-                else
-                {
-                    // If a parent node is selected (has children),
-                    // recursively analyze only the checked plugin nodes.
-                    await PluginManager.AnalyzeAll(selectedNode);
-                }
-
-                // Perform feature-specific analysis (non-plugin)
+                statusLabel.Text = $"Analyzing {selectedNode.Text}...";
+                if (selectedNode.Nodes.Count == 0) await PluginManager.AnalyzePlugin(selectedNode);
+                else await PluginManager.AnalyzeAll(selectedNode);
                 FeatureNodeManager.AnalyzeFeature(selectedNode);
+                statusLabel.Text = "Ready";
             }
         }
 
-        /// <summary>
-        /// Fixes all checked plugin and feature nodes starting from the selected node from the context menu.
-        /// </summary>
         private async void fixMarkedFeatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeFeatures.SelectedNode is TreeNode selectedNode)
             {
-                Logger.Log($"🔧 Fixing Feature: {selectedNode.Text}", LogLevel.Info);
-
-                // Recursively fix all checked feature nodes (non-plugin)
+                statusLabel.Text = $"Fixing {selectedNode.Text}...";
                 await FeatureNodeManager.FixFeature(selectedNode);
-
-                // Recursively fix all checked plugin nodes starting from the selected node
                 await PluginManager.FixPlugin(selectedNode);
+                statusLabel.Text = "Ready";
             }
         }
 
-        /// <summary>
-        /// Restores the selected plugin or feature to its previous state from the context menu.
-        /// </summary>
         private async void restoreMarkedFeatureToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (treeFeatures.SelectedNode is TreeNode selectedNode)
             {
-                if (PluginManager.IsPluginNode(selectedNode))
-                    // Restore the plugin using its Undo command if available!
-                    await PluginManager.RestorePlugin(selectedNode);
-                else
-                    Logger.Log($"↩️ Restoring Feature: {selectedNode.Text}", LogLevel.Info);
-
-                // Perform feature-specific restore (non-plugin)
-                FeatureNodeManager.RestoreFeature(selectedNode);
+                statusLabel.Text = $"Restoring {selectedNode.Text}...";
+                if (PluginManager.IsPluginNode(selectedNode)) await PluginManager.RestorePlugin(selectedNode);
+                await FeatureNodeManager.RestoreFeature(selectedNode);
+                statusLabel.Text = "Ready";
             }
         }
 
@@ -250,11 +200,6 @@ namespace CrapFixer
             }
         }
 
-        /// <summary>
-        /// Checks or unchecks all child nodes when a parent node is checked/unchecked.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void treeFeatures_AfterCheck(object sender, TreeViewEventArgs e)
         {
             if (e.Action != TreeViewAction.Unknown)
@@ -268,30 +213,21 @@ namespace CrapFixer
         {
             if (e.Button == MouseButtons.Right)
             {
-                // Get the node under the mouse cursor
                 TreeNode nodeUnderMouse = treeFeatures.GetNodeAt(e.X, e.Y);
-
                 if (nodeUnderMouse != null)
                 {
                     treeFeatures.SelectedNode = nodeUnderMouse;
-
-                    // Show the context menu at the mouse position
                     contextMenuStrip.Show(treeFeatures, e.Location);
                 }
             }
         }
 
-        /// <summary>
-        /// Handles the link click event for selecting or deselecting all items in the list.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private bool treeChecked = false;
-
         private void linkSelection_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             if (tabControl.SelectedTab == Windows)
             {
+                treeChecked = !treeChecked;
                 foreach (TreeNode node in treeFeatures.Nodes)
                 {
                     node.Checked = treeChecked;
@@ -302,73 +238,104 @@ namespace CrapFixer
                             grandChild.Checked = treeChecked;
                     }
                 }
-
-                treeChecked = !treeChecked;
+                linkSelection.Text = treeChecked ? "Deselect all" : "Select all";
             }
             else if (tabControl.SelectedTab == Apps)
             {
-                bool shouldCheck = checkedListBoxApps.Items.Cast<object>()
-                    .Any(item => checkedListBoxApps.GetItemChecked(checkedListBoxApps.Items.IndexOf(item)) == false);
+                bool shouldCheck = checkedListBoxApps.Items.Cast<object>().Any(item => !checkedListBoxApps.GetItemChecked(checkedListBoxApps.Items.IndexOf(item)));
+                for (int i = 0; i < checkedListBoxApps.Items.Count; i++) checkedListBoxApps.SetItemChecked(i, shouldCheck);
+            }
+        }
 
-                for (int i = 0; i < checkedListBoxApps.Items.Count; i++)
+        private void btnSaveLog_Click(object sender, EventArgs e)
+        {
+            using (var sfd = new SaveFileDialog { Filter = "Log files (*.txt)|*.txt|All files (*.*)|*.*", FileName = "CrapFixer_Log.txt" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
                 {
-                    checkedListBoxApps.SetItemChecked(i, shouldCheck);
+                    File.WriteAllText(sfd.FileName, rtbLogger.Text);
+                    Logger.Log($"Log saved to {sfd.FileName}", LogLevel.Info);
                 }
+            }
+        }
+
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string filter = txtSearch.Text.Trim();
+            if (filter == "Search settings..." || string.IsNullOrEmpty(filter))
+            {
+                foreach (TreeNode node in treeFeatures.Nodes) ResetNodeVisibility(node);
+                return;
+            }
+
+            foreach (TreeNode node in treeFeatures.Nodes) FilterNode(node, filter.ToLower());
+        }
+
+        private void ResetNodeVisibility(TreeNode node)
+        {
+            node.BackColor = Color.White;
+            foreach (TreeNode child in node.Nodes) ResetNodeVisibility(child);
+        }
+
+        private bool FilterNode(TreeNode node, string filter)
+        {
+            bool matches = node.Text.ToLower().Contains(filter);
+            bool childMatches = false;
+            foreach (TreeNode child in node.Nodes)
+            {
+                if (FilterNode(child, filter)) childMatches = true;
+            }
+
+            if (matches) node.BackColor = Color.Yellow;
+            else node.BackColor = Color.White;
+
+            if (matches || childMatches) { node.Expand(); return true; }
+            return false;
+        }
+
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+            if (txtSearch.Text == "Search settings...")
+            {
+                txtSearch.Text = "";
+                txtSearch.ForeColor = Color.Black;
+            }
+        }
+
+        private void txtSearch_Leave(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtSearch.Text))
+            {
+                txtSearch.Text = "Search settings...";
+                txtSearch.ForeColor = Color.Gray;
             }
         }
 
         private void panelHeader_Paint(object sender, PaintEventArgs e)
         {
-            var panel = sender as Panel;
             var g = e.Graphics;
-
-            // Solid background: #4D4D4D
             g.Clear(Color.FromArgb(77, 77, 77));
-
-            // Inset line effect (3D-like): light line + shadow line
-            Color baseColor = Color.FromArgb(80, 80, 80); // inset base
-
+            Color baseColor = Color.FromArgb(80, 80, 80);
             using (var topLine = new Pen(ControlPaint.Light(baseColor, 0.0f)))
             using (var bottomLine = new Pen(ControlPaint.Dark(baseColor, 0.2f)))
             {
-                g.SmoothingMode = SmoothingMode.None;
-                g.DrawLine(topLine, 0, panel.Height - 2, panel.Width, panel.Height - 2);
-                g.DrawLine(bottomLine, 0, panel.Height - 1, panel.Width, panel.Height - 1);
+                g.DrawLine(topLine, 0, panelHeader.Height - 2, panelHeader.Width, panelHeader.Height - 2);
+                g.DrawLine(bottomLine, 0, panelHeader.Height - 1, panelHeader.Width, panelHeader.Height - 1);
             }
         }
 
-        // Handles click on the header image to open the GitHub page
-        private void PictureHeader_Click(object sender, EventArgs e)
-        {
-            Utils.OpenGitHubPage(sender, e);
-        }
-
-        // Handles link click to check for updates
+        private void PictureHeader_Click(object sender, EventArgs e) => Utils.OpenGitHubPage(sender, e);
         private void linkUpdateCheck_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var updateUrl = $"https://builtbybel.github.io/CrapFixer/update-check.html?version={Program.GetAppVersion()}";
-
-            var psi = new ProcessStartInfo
-            {
-                FileName = updateUrl,
-                UseShellExecute = true
-            };
-            Process.Start(psi);
+            Process.Start(new ProcessStartInfo { FileName = $"https://builtbybel.github.io/CrapFixer/update-check.html?version={Program.GetAppVersion()}", UseShellExecute = true });
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (IniStateManager.IsViewSettingEnabled("SETTINGS", "checkSaveToINI"))
-            {
-                IniStateManager.Save(treeFeatures, this);
-            }
-
-            Logger.OutputBox = null; // Remove reference
+            if (IniStateManager.IsViewSettingEnabled("SETTINGS", "checkSaveToINI")) IniStateManager.Save(treeFeatures, this);
+            Logger.OutputBox = null;
         }
 
-        private void btnGitHub_Click(object sender, EventArgs e)
-        {
-            _navigationManager.SwitchView(new OptionsView());
-        }
+        private void btnGitHub_Click(object sender, EventArgs e) => _navigationManager.SwitchView(new OptionsView());
     }
 }

@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -8,53 +7,13 @@ namespace Settings.Edge
     public class GamerMode : FeatureBase
     {
         private const string keyName = @"HKEY_LOCAL_MACHINE\Software\Policies\Microsoft\Edge";
-        private const string valueName = "GamerModeEnabled";
-        private const int recommendedValue = 0;
+        private const string valueName = "EdgeGamerModeEnabled";
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID() => "Disable Gamer Mode";
-
-        public override string Info() => "Microsoft Edge Gamer Mode allows gamers to personalize their browser with gaming themes and gives them the option of enabling Efficiency Mode for PC gaming, the Gaming feed on new tabs, sidebar apps for gamers, and more";
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, Microsoft.Win32.RegistryValueKind.DWord);
-
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, Microsoft.Win32.RegistryValueKind.DWord);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Recommended: 0";
+        public override string ID() => "Disable Edge Gamer Mode";
+        public override string Info() => "Disables Gamer Mode in Microsoft Edge.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, 0));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, 0, RegistryValueKind.DWord, "Edge Gamer Mode disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 1, RegistryValueKind.DWord, "Edge Gamer Mode enabled");
     }
 }

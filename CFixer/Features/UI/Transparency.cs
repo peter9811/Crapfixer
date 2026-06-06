@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -11,57 +10,11 @@ namespace Settings.Personalization
         private const string valueName = "EnableTransparency";
         private const int recommendedValue = 0;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Suggestion: {recommendedValue} (No transparency – smoother performance, still stylish)";
-        }
-
-
-        public override string ID()
-        {
-            return "Disable Transparency Effects";
-        }
-
-        public override string Info()
-        {
-            return "This feature disables transparency effects for Start menu, taskbar, and other surfaces.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(
-                   Utils.IntEquals(keyName, valueName, recommendedValue)
-             );
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error in DisableTransparency: " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Error in DisableTransparency (Undo): " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Suggestion: {recommendedValue}";
+        public override string ID() => "Disable Transparency Effects";
+        public override string Info() => "This feature disables transparency effects for Start menu, taskbar, and other surfaces.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, recommendedValue, RegistryValueKind.DWord, "Transparency disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 1, RegistryValueKind.DWord, "Transparency enabled");
     }
 }

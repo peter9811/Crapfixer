@@ -88,6 +88,7 @@
     <Compile Include="Helpers\OSHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\Logger.cs" />
+    <Compile Include="Helpers\RegistryHelper.cs" />
     <Compile Include="IniStateManager.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

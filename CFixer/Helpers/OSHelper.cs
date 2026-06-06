@@ -1,77 +1,84 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Management.Automation;
+using System;
+using System.Diagnostics;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 
-namespace OSHelper
+namespace CrapFixer
 {
-    internal class OSHelper
+    internal static class OSHelper
     {
+        public static bool IsAdministrator()
+        {
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+        }
+
+        public static void RestartAsAdmin()
+        {
+            ProcessStartInfo proc = new ProcessStartInfo
+            {
+                UseShellExecute = true,
+                WorkingDirectory = Environment.CurrentDirectory,
+                FileName = Process.GetCurrentProcess().MainModule.FileName,
+                Verb = "runas"
+            };
+
+            try
+            {
+                Process.Start(proc);
+                Environment.Exit(0);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Could not restart as administrator: " + ex.Message, LogLevel.Error);
+            }
+        }
+
+        public static async Task CreateRestorePoint(string description)
+        {
+            try
+            {
+                Logger.Log("Creating System Restore Point...", LogLevel.Info);
+                await Task.Run(() =>
+                {
+                    using (var process = new Process())
+                    {
+                        process.StartInfo.FileName = "powershell.exe";
+                        process.StartInfo.Arguments = $"-Command \"Checkpoint-Computer -Description '{description}' -RestorePointType 'MODIFY_SETTINGS'\"";
+                        process.StartInfo.CreateNoWindow = true;
+                        process.StartInfo.UseShellExecute = false;
+                        process.Start();
+                        process.WaitForExit();
+                    }
+                });
+                Logger.Log("System Restore Point creation request sent.", LogLevel.Info);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log("Failed to create Restore Point: " + ex.Message, LogLevel.Warning);
+            }
+        }
+
         public static async Task<string> GetWindowsVersion()
         {
             return await Task.Run(() =>
             {
                 try
                 {
-                    using (PowerShell ps = PowerShell.Create())
-                    {
-                        ps.AddScript("Get-CimInstance -ClassName Win32_OperatingSystem");
-                        var results = ps.Invoke();
+                    string caption = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "ProductName", "")?.ToString();
+                    if (string.IsNullOrEmpty(caption)) caption = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "Caption", "")?.ToString();
 
-                        foreach (var result in results)
-                        {
-                            if (result == null) continue;
+                    string displayVersion = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "DisplayVersion", "")?.ToString();
+                    string build = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "CurrentBuildNumber", "")?.ToString();
+                    string ubr = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion", "UBR", "")?.ToString();
 
-                            string caption = result.Properties["Caption"]?.Value?.ToString();
-                            string version = result.Properties["Version"]?.Value?.ToString();
-                            string build = result.Properties["BuildNumber"]?.Value?.ToString();
-
-                            string displayVersion = Registry.GetValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion",
-                                "DisplayVersion", "")?.ToString();
-
-                            // UBR = Update Build Revision
-                            string ubr = Registry.GetValue(
-                                @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion",
-                                "UBR", 0)?.ToString();
-
-                            bool isInsider = false;
-                            string ring = null;
-
-                            using (var insiderKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\UpdateOrchestrator"))
-                            {
-                                if (insiderKey != null)
-                                {
-                                    object enabled = insiderKey.GetValue("EnableInsiderBuilds");
-                                    if (enabled != null && Convert.ToInt32(enabled) == 1)
-                                    {
-                                        isInsider = true;
-                                        ring = insiderKey.GetValue("Ring")?.ToString();
-                                    }
-                                }
-                            }
-
-                            string osName = caption?.Contains("Windows 11") == true ? "Windows 11" :
-                                            caption?.Contains("Windows 10") == true ? "Windows 10" :
-                                            caption ?? "Unknown OS";
-
-                            string fullBuild = !string.IsNullOrEmpty(build) && !string.IsNullOrEmpty(ubr)
-                                ? $"{build}.{ubr}"
-                                : build ?? "unknown";
-
-                            string insiderInfo = isInsider ? $" (Insider: {ring})" : "";
-
-                            return $"{osName} {displayVersion}{insiderInfo} (Build {fullBuild})";
-                        }
-                    }
+                    return $"Windows: {displayVersion} (Build {build}.{ubr})";
                 }
-                catch (Exception ex)
-                {
-                    return $"OS info unavailable: {ex.Message}";
-                }
-
-                return "OS not supported";
+                catch { return "Unknown Windows Version"; }
             });
         }
     }

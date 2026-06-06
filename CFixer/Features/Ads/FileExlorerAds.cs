@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using System;
+using Microsoft.Win32;
 using CrapFixer;
 using System.Threading.Tasks;
 
@@ -11,56 +10,11 @@ namespace Settings.Ads
         private const string valueName = "ShowSyncProviderNotifications";
         private const int recommendedValue = 0;
 
-        public override string GetFeatureDetails()
-        {
-            return $"{keyName} | Value: {valueName} | Recommended Value: {recommendedValue}";
-        }
-
-        public override string ID()
-        {
-            return "Disable File Explorer Ads";
-        }
-
-        public override string Info()
-        {
-            return "This feature will disable ads in File Explorer.";
-        }
-
-        public override Task<bool> CheckFeature()
-        {
-            return Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
-        }
-
-        public override Task<bool> DoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 0, RegistryValueKind.DWord);
-                Logger.Log("File Explorer Ads disabled", LogLevel.Info);
-                return Task.FromResult(true);
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return Task.FromResult(false);
-        }
-
-        public override bool UndoFeature()
-        {
-            try
-            {
-                Registry.SetValue(keyName, valueName, 1, RegistryValueKind.DWord);
-                Logger.Log("File Explorer Ads enabled", LogLevel.Info);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Logger.Log("Code red in " + ex.Message, LogLevel.Error);
-            }
-
-            return false;
-        }
+        public override string GetFeatureDetails() => $"{keyName} | Value: {valueName} | Recommended: {recommendedValue}";
+        public override string ID() => "Disable File Explorer Ads";
+        public override string Info() => "This feature will disable ads in File Explorer.";
+        public override Task<bool> CheckFeature() => Task.FromResult(Utils.IntEquals(keyName, valueName, recommendedValue));
+        public override Task<bool> DoFeature() => RegistryHelper.SetValue(keyName, valueName, 0, RegistryValueKind.DWord, "File Explorer Ads disabled");
+        public override Task<bool> UndoFeature() => RegistryHelper.SetValue(keyName, valueName, 1, RegistryValueKind.DWord, "File Explorer Ads enabled");
     }
 }
